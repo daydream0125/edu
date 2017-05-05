@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE hibernate-configuration PUBLIC
+          "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+
+<session-factory>
+    <property name="connection.url">jdbc:mysql://localhost:3306/OnlineEDU</property>
+    <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+    <mapping class="com.edu.model.Account" />
+    <mapping class="com.edu.model.AreaInfo"/>
+    <mapping class="com.edu.model.Classmate"/>
+    <mapping class="com.edu.model.Clazz"/>
+    <mapping class="com.edu.model.Course"/>
+    <mapping class="com.edu.model.Exercise"/>
+    <mapping class="com.edu.model.Problem"/>
+    <mapping class="com.edu.model.Role"/>
+    <mapping class="com.edu.model.Organization"/>
+    <mapping class="com.edu.model.SubmitExercise"/>
+    <mapping class="com.edu.model.SubmitAnswer"/>
+    <mapping class="com.edu.model.UserInfo"/>
+    <mapping class="com.edu.model.ChapterContent"/>
+    <mapping class="com.edu.model.CourseChapter"/>
+    <mapping class="com.edu.model.Log"/>
+
+
+</session-factory>
+
+</hibernate-configuration>

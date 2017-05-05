@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:s="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+    <!--验证码的生成-->
+    <bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">
+        <property name="config">
+            <bean class="com.google.code.kaptcha.util.Config">
+                <constructor-arg>
+                    <props>
+                        <prop key="kaptcha.border">yes</prop>
+                        <prop key="kaptcha.border.color">green</prop>
+                        <prop key="kaptcha.textproducer.font.color">black</prop>
+                        <prop key="kaptcha.image.width">100</prop>
+                        <prop key="kaptcha.image.height">35</prop>
+                        <prop key="kaptcha.textproducer.font.size">35</prop>
+                        <prop key="kaptcha.session.key">code</prop>
+                        <prop key="kaptcha.textproducer.char.length">4</prop>
+                        <prop key="kaptcha.textproducer.font.names">宋体,楷体,微软雅黑</prop>
+                    </props>
+                </constructor-arg>
+            </bean>
+        </property>
+    </bean>
+
+    <s:global-method-security pre-post-annotations="enabled"/>
+
+    <s:http use-expressions="true">
+        <!--对根路径下的资源不设置拦截（公共资源），只有对需要拦截的资源进行相应的拦截-->
+        <s:intercept-url pattern="/no-public/*" access="hasRole('ROLE_USER')"/>
+        <s:intercept-url pattern="/userInfo" access="hasRole('ROLE_USER')"/>
+        <s:intercept-url pattern="/teacher/**" access="hasRole('ROLE_TEACHER')"/>
+        <s:intercept-url pattern="/student/**" access="hasRole('ROLE_STUDENT')" />
+
+
+        <!-- loging-processing-url=" /spring_security_check" 仅仅是个名字，但是要和显示层action保持一致，是security进行认证的记号而已 -->
+        <!-- login-page 自定义的登录处理action,该action不进行任何的认证处理，spring security会在该action前执行-->
+        <!-- default-target-url登录成功后的页面 -->
+        <!-- login-processing-ur不用改动，但是jsp页面的action必须与此相同 -->
+        <!-- authentication-failure-urljsp页面输入框名字必须与此相同 -->
+        <!-- jsp页面输入框名字必须与此相同 -->
+        <s:form-login login-page="/login"
+                      default-target-url="/mainmenu"
+                      login-processing-url="/j_security_check"
+                      authentication-failure-url="/loginError"
+                      authentication-success-handler-ref="authenticationSuccessHandler"
+                      password-parameter="password"
+                      username-parameter="username"/>
+
+        <s:logout invalidate-session="true"
+                  logout-success-url="/logout" logout-url="/spring_logout"/>
+    </s:http>
+    <!--用于处理登录成功后相关信息的写入-->
+    <bean id="authenticationSuccessHandler" class="com.edu.security.SimpleLoginSuccessHandler">
+        <property name="defaultTargetUrl" value="/index"/>
+        <property name="forwardToDestination" value="false"/>
+    </bean>
+
+    <bean id="passwordEncoder" class="com.edu.utils.Md5PasswordEncoder"/>
+
+    <bean id="userDetailsService" class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="usersByUsernameQuery"
+                  value="select userID, password , state as enabled from account where userID = ?"/>
+        <property name="authoritiesByUsernameQuery" value="select u.userID, r.roleName as authority from account u,role r,user_role ur
+             where u.userID=ur.userID and r.roleID = ur.roleID and u.userID= ?"/>
+        <property name="enableGroups" value="false"/>
+    </bean>
+
+    <s:authentication-manager>
+        <s:authentication-provider user-service-ref="userDetailsService">
+            <s:password-encoder ref="passwordEncoder"/>
+        </s:authentication-provider>
+    </s:authentication-manager>
+
+
+    <bean id="roleHierarchy"
+          class="org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl">
+        <property name="hierarchy"><!-- 角色继承关系 -->
+            <value>
+                ROLE_ADMIN > ROLE_USER
+                ROLE_ADMIN > ROLE_TEACHER
+                ROLW_TEACHER > ROLE_STUDENT
+            </value>
+        </property>
+    </bean>
+</beans>
