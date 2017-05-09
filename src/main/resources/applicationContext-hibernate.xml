@@ -63,6 +63,11 @@
                 <prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>
             </props>  
         </property>
+        <property name="annotatedClasses">
+            <list>
+                <value>com.edu.model.Notice</value>
+            </list>
+        </property>
     </bean>
 
     <!--spring3认为hibernate4已经对数据库的操作进行了相当好的封装，在dao层不需要调用spring提供的HibernateTemplate，-->

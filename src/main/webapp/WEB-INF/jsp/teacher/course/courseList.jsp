@@ -2,31 +2,40 @@
 <%@include file="../../static.jsp" %>
 <html>
 <head>
-    <title>已开课程</title>
+    <title>课程管理</title>
 </head>
 <body>
 <%@include file="../../navigation.jsp" %>
 
 <div class="container" id="container">
-    <h1>已开课程</h1>
-    <br>
-        <span ><i-button type="primary" size="large" @click="addCourse">开设新课</i-button>
-</span>
-    <br>
-    <Card style="width:350px;height: 400px;float: left;margin-left: 10px;margin-top: 10px" v-for="c in courses">
-        <p slot="title" style="font-size: 18px">
-            {{c.courseName}}
-        </p>
-        <div style="width: 100%;height: 200px;overflow: hidden">
-            <img :src="c.coursePic" alt="" style="width: 100%;height: 200px;overflow: hidden">
-        </div>
-        <div style="height: 90px;overflow: hidden">
-            <p style="font-size: 14px">{{c.courseDescription}}</p>
-        </div>
-        <div style="margin-bottom: 10px">
-            <i-button @click="courseInfo(c.courseId)" type="primary">查看详情</i-button>
-        </div>
-    </Card>
+    <div style="color: #004772;font-weight: bold">
+        <span>当前位置：</span>
+        <a href="">首页</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="javascript:">课程管理</a>
+        <hr>
+    </div>
+    <div style="float: right;margin-right: 100px;height: 40px">
+        <span><i-button type="primary" size="large" @click="addCourse">开设新课</i-button></span>
+    </div>
+
+    <div style="margin-top: 50px">
+        <Card style="width:350px;height: 400px;float: left;margin-left: 10px;margin-top: 10px" v-for="c in courses">
+            <p slot="title" style="font-size: 18px">
+                {{c.courseName}}
+            </p>
+            <div style="width: 100%;height: 200px;overflow: hidden">
+                <img :src="c.coursePic" alt="" style="width: 100%;height: 200px;overflow: hidden">
+            </div>
+            <div style="height: 90px;overflow: hidden">
+                <p style="font-size: 14px">{{c.courseDescription}}</p>
+            </div>
+            <div style="margin-bottom: 10px">
+                <i-button @click="courseInfo(c.courseId)" type="primary">查看详情</i-button>
+            </div>
+        </Card>
+    </div>
+
 </div>
 <%@include file="../../js.jsp" %>
 
@@ -39,14 +48,14 @@
             courses: []
         },
         methods: {
-            addCourse:function () {
+            addCourse: function () {
                 window.location.href = "teacher/addCourse"
             },
             courseInfo: function (courseId) {
                 window.location.href = "course/" + courseId;
             },
-            getCoursesByTeacherId:function(teacherId) {
-                $.get("teacher/" + teacherId + "/courses",function (data) {
+            getCoursesByTeacherId: function (teacherId) {
+                $.get("teacher/" + teacherId + "/courses", function (data) {
                     this.courses = data;
                 }.bind(this));
             }

@@ -183,7 +183,7 @@ public class ExerciseService {
         return relativePath;
     }
 
-    public boolean addProbemsToExercise(int[] problemsId, int exerciseId) {
+    public boolean addProblemsToExercise(int[] problemsId, int exerciseId) {
         if (problemsId.length == 0) {
             return false;
         } else {
@@ -311,6 +311,7 @@ public class ExerciseService {
             for (int i = 0; i < scores.length; i++) {
                 SubmitAnswer submitAnswer = submitAnswerDAO.get(answersId[i]);
                 submitAnswer.setResult((double) scores[i]);
+                submitAnswer.setJudge(true);
                 score += scores[i];
                 submitAnswerDAO.update(submitAnswer);
             }
@@ -323,5 +324,51 @@ public class ExerciseService {
             return false;
         }
         return true;
+    }
+
+    //计算每位同学某一练习下的最终得分，计算规则为 总分/problemCount*10（转换为百分制）
+    public boolean countScore(int exerciseId) {
+        try {
+            Long problemCount = exerciseDAO.getProblemCount(exerciseId);
+            List<SubmitExercise> submitExercises = submitExerciseDAO.get(exerciseId);
+            for (SubmitExercise s : submitExercises) {
+                //已经计算过，跳过
+                if (s.getCountScore()) {
+                    continue;
+                }
+                s.setScore(s.getScore() / problemCount * 10.0);
+                s.setCountScore(true);
+                submitExerciseDAO.update(s);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isExercciseFinishJudge(int exerciseId) {
+        return exerciseDAO.getJudge(exerciseId);
+    }
+
+
+    public List getClassmates(int exerciseId) {
+        return submitExerciseDAO.getClassmates(exerciseId);
+    }
+
+    public int getClassmateIdByExerciseAndUser(int exerciseId, String userId) {
+        return submitExerciseDAO.getClassmateByExerciseAndUser(exerciseId,userId);
+    }
+
+    public boolean checkIsExistsAnswers(int exerciseId, String userId) {
+        return submitExerciseDAO.getByExerciseAndUser(exerciseId,userId) != null;
+    }
+
+    public List getAnswers(int exerciseId,String userId) {
+        return submitAnswerDAO.getAnswersByUserAndExercise(exerciseId,userId);
+    }
+
+    public List getSharpExercise(int exerciseId) {
+        return exerciseDAO.getSharpExercise(exerciseId);
     }
 }

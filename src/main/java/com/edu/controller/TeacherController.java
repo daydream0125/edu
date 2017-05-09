@@ -152,6 +152,7 @@ public class TeacherController {
     public String exerciseManage() {
         return "teacher/exercise/exerciseManage";
     }
+
     @RequestMapping(value = "/{teacherId}/exercises",method = RequestMethod.GET)
     @ResponseBody
     public List getExerciseByTeacherId(@PathVariable("teacherId") String teacherId) {
@@ -185,7 +186,7 @@ public class TeacherController {
     @RequestMapping("/submitProblems")
     @ResponseBody
     public boolean saveProblemsToExercise(@RequestParam("submitProblems[]") int problemsId[],int exerciseId) {
-        return exerciseService.addProbemsToExercise(problemsId,exerciseId);
+        return exerciseService.addProblemsToExercise(problemsId,exerciseId);
     }
 
 
@@ -274,6 +275,12 @@ public class TeacherController {
     @ResponseBody
     public List getSubjectiveAnswers(int exerciseId,int classmateId) {
         return exerciseService.getSubjectiveAnswers(exerciseId,classmateId);
+    }
+
+    @RequestMapping("/exercise/countScore")
+    @ResponseBody
+    public boolean countScore(int exerciseId) {
+        return exerciseService.countScore(exerciseId);
     }
 
 

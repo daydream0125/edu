@@ -3,12 +3,26 @@
 <html>
     <head>
         <title>添加课程</title>
+        <style>
+            form{
+                width: 500px;
+                margin-left: 200px;
+            }
+        </style>
     </head>
 <body>
 <%@include file="../../navigation.jsp"%>
 
 <div class="container">
-
+    <div style="color: #004772;font-weight: bold">
+        <span>当前位置：</span>
+        <a href="">首页</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="teacher/courseList">课程管理</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="javascript:">新增</a>
+        <hr>
+    </div>
     <!-- Main component for a primary marketing message or call to action -->
         <h1>添加课程</h1>
         <form action="${pageContext.request.contextPath}/teacher/saveCourse" method="post" enctype="multipart/form-data">

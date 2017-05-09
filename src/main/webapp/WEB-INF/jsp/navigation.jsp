@@ -32,10 +32,17 @@
                     <li id="student-exercise" :class="{active:isActive}">
                         <a href="${pageContext.request.contextPath}/student/exerciseManage">我的作业</a>
                     </li>
+
+                    <li id="student-score" :class="{active:isActive}">
+                        <a href="${pageContext.request.contextPath}/student/score">我的成绩</a>
+                    </li>
                 </sec:authorize>
                 <sec:authorize access="hasRole('ROLE_USER')">
                     <li id="userInfo" :class="{active:isActive}"><a href="${pageContext.request.contextPath}/userInfo">个人信息</a></li>
                 </sec:authorize>
+                <li id="notice" :class="{active:isActive}">
+                    <a href="${pageContext.request.contextPath}/notice">通知公告</a>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <sec:authorize access="hasRole('ROLE_USER')">
@@ -44,7 +51,7 @@
                     <li><a href="${pageContext.request.contextPath}/spring_logout">注销</a></li>
                 </sec:authorize>
                 <sec:authorize access="not hasRole('ROLE_USER')">
-                    <li ><a href="${pageContext.request.contextPath}/login">登录</a></li>
+                    <li ><a href="${pageContext.request.contextPath}/sign">登录</a></li>
                 </sec:authorize>
             </ul>
         </div><!--/.nav-collapse -->

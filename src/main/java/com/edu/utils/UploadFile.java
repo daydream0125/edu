@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class UploadFile {
-    public static final String BASE_URL = "/Users/hanhao0125/Documents/edu-resources/";
+    public static final String BASE_URL = "/Users/dev/edu-resources/";
     public static String uploadFile(MultipartFile multipartFile,String path) {
         //相对路径,数据库存储该字段
         String relativePath = path + System.currentTimeMillis() + multipartFile.getOriginalFilename();

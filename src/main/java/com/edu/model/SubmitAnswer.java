@@ -2,8 +2,6 @@ package com.edu.model;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -21,7 +19,7 @@ public class SubmitAnswer {
     private Date startTime;
     private Date endTime;
     private Double result;
-    private String resultex;
+    private String comment;
     private String answerPic;
     private Boolean judge;
     private Problem problem;
@@ -103,13 +101,13 @@ public class SubmitAnswer {
     }
 
     @Basic
-    @Column(name = "resultex", nullable = true, length = 2147483647)
-    public String getResultex() {
-        return resultex;
+    @Column(name = "comment", nullable = true, length = 2147483647)
+    public String getComment() {
+        return comment;
     }
 
-    public void setResultex(String resultex) {
-        this.resultex = resultex;
+    public void setComment(String resultex) {
+        this.comment = resultex;
     }
 
 
@@ -136,7 +134,7 @@ public class SubmitAnswer {
         if (startTime != null ? !startTime.equals(that.startTime) : that.startTime != null) return false;
         if (endTime != null ? !endTime.equals(that.endTime) : that.endTime != null) return false;
         if (result != null ? !result.equals(that.result) : that.result != null) return false;
-        if (resultex != null ? !resultex.equals(that.resultex) : that.resultex != null) return false;
+        if (comment != null ? !comment.equals(that.comment) : that.comment != null) return false;
         return true;
     }
 
@@ -148,7 +146,7 @@ public class SubmitAnswer {
         result1 = 31 * result1 + (startTime != null ? startTime.hashCode() : 0);
         result1 = 31 * result1 + (endTime != null ? endTime.hashCode() : 0);
         result1 = 31 * result1 + (result != null ? result.hashCode() : 0);
-        result1 = 31 * result1 + (resultex != null ? resultex.hashCode() : 0);
+        result1 = 31 * result1 + (comment != null ? comment.hashCode() : 0);
         return result1;
     }
 

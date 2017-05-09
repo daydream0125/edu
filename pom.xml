@@ -150,6 +150,11 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.7</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.7</version>
+        </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -169,25 +174,6 @@
             <version>1.6.11</version>
         </dependency>
 
-        <!--<dependency>-->
-        <!--<groupId>org.hibernate</groupId>-->
-        <!--<artifactId>hibernate-core</artifactId>-->
-        <!--<version>3.5.4-Final</version>-->
-        <!--</dependency>-->
-
-        <!--&lt;!&ndash; for JPA, use hibernate-entitymanager instead of hibernate-core &ndash;&gt;-->
-        <!--<dependency>-->
-        <!--<groupId>org.hibernate</groupId>-->
-        <!--<artifactId>hibernate-entitymanager</artifactId>-->
-        <!--<version>3.5.4-Final</version>-->
-        <!--</dependency>-->
-        <!--&lt;!&ndash; https://mvnrepository.com/artifact/org.hibernate/hibernate-annotations &ndash;&gt;-->
-        <!--<dependency>-->
-        <!--<groupId>org.hibernate</groupId>-->
-        <!--<artifactId>hibernate-annotations</artifactId>-->
-        <!--<version>3.5.4-Final</version>-->
-        <!--</dependency>-->
-        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-scratchpad -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-scratchpad</artifactId>
@@ -222,7 +208,7 @@
         <dependency>
             <groupId>javax.transaction</groupId>
             <artifactId>jta</artifactId>
-            <version>1.0.1b</version>
+            <version>1.1</version>
         </dependency>
 
         <!-- kaptcha -->
@@ -232,11 +218,6 @@
             <version>2.3.2</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>sqljdbc4</artifactId>
-            <version>4.0</version>
-        </dependency>
 
 
         <dependency>
@@ -319,7 +300,7 @@
                     <webApp>
                         <contextPath>/edu</contextPath>
                         <baseResource implementation="org.eclipse.jetty.util.resource.ResourceCollection">
-                            <resourcesAsCSV>src/main/webapp,/Users/hanhao0125/Documents/edu-resources/</resourcesAsCSV>
+                            <resourcesAsCSV>src/main/webapp,/Users/dev/edu-resources/</resourcesAsCSV>
                         </baseResource>
                     </webApp>
                 </configuration>
@@ -357,6 +338,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5</version>
                 <executions>
                     <execution>
                         <id>compile</id>

@@ -67,7 +67,7 @@ public class CourseChapterDAO {
 
     //模糊查询，%%为匹配任意的中文
     public List searchByChapterTitle(String chapterTitle) {
-        String hql = "from CourseChapter where title like :t";
+        String hql = "select cc.title,c.course.courseName from CourseChapter c where c.title like :t";
         Query query = getSession().createQuery(hql);
         query.setString("t","%"+chapterTitle+"%");
         return query.list();

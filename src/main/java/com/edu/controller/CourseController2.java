@@ -36,6 +36,18 @@ public class CourseController2 {
         return courseService.getCourseByCourseId(courseId);
     }
 
+
+    /**
+     * 获取课程的简单信息，包括 courseName，courseDesc，
+     * @param courseId
+     * @return
+     */
+    @RequestMapping("sharp/{courseId}")
+    @ResponseBody
+    public List getSharpCourse(@PathVariable("courseId") int courseId) {
+        return courseService.getSharpCourse(courseId);
+    }
+
     @RequestMapping(value = "{courseId}/studentNum",method = RequestMethod.GET)
     @ResponseBody
     public Long getStudentsNum(@PathVariable("courseId") int courseId) {
@@ -86,10 +98,18 @@ public class CourseController2 {
         return courseService.getChapterContentByChapterId(sectionId);
     }
 
+
     @RequestMapping("courseId/{chapterId}")
     @ResponseBody
     public int getCourseIdByChapterId(@PathVariable("chapterId") int chapterId) {
         return courseService.getCourseIdByChapterId(chapterId);
+    }
+
+
+    @RequestMapping("courseName/{courseId}")
+    @ResponseBody
+    public String getCourseName(@PathVariable("courseId") int courseId) {
+        return courseService.getCourseName(courseId);
     }
 
 }

@@ -23,6 +23,7 @@ public class SubmitExercise {
     private String submitIP;
     private Boolean judgeObjective = false;
     private Boolean judgeSubjective = false;
+    private Boolean countScore = false;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -109,6 +110,17 @@ public class SubmitExercise {
 
     public void setJudgeSubjective(Boolean judgeSubjective) {
         this.judgeSubjective = judgeSubjective;
+    }
+
+
+    @Basic
+    @Column(name="countScore")
+    public Boolean getCountScore() {
+        return countScore;
+    }
+
+    public void setCountScore(Boolean countScore) {
+        this.countScore = countScore;
     }
 
     @Override

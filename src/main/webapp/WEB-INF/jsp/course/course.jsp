@@ -81,6 +81,7 @@
         <sec:authorize access="hasRole('ROLE_TEACHER')">
             <i-button type="primary" size="large" @click="goToCourseManage">课程管理</i-button>
         </sec:authorize>
+        <br><br>
         <div id="menu">
             <i-menu mode="horizontal" theme="light" active-name="1" @on-select="changeMenu">
                 <Row>

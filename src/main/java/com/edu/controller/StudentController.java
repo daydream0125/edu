@@ -6,10 +6,12 @@ import com.edu.service.ClazzService;
 import com.edu.service.CourseService;
 import com.edu.service.ExerciseService;
 import com.edu.utils.HttpUtils;
+import com.edu.utils.UploadFile;
 import com.edu.utils.model.Answer;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +36,12 @@ public class StudentController {
         model.addAttribute("chapters", chapters);
         //model.addAttribute("courseId", courseId);
         return "student/courseChapterInfo";
+    }
+
+    @RequestMapping("/exercise/{exerciseId}/answers")
+    public String viewAnswers(@PathVariable("exerciseId") int exerciseId,Model model) {
+        model.addAttribute("exerciseId",exerciseId);
+        return "student/viewAnswer";
     }
 
     //查询学生是否已注册过班级
@@ -131,6 +139,42 @@ public class StudentController {
     @ResponseBody
     public boolean saveSubmitAnswers(@RequestBody Answer answer, HttpServletRequest request) {
         return exerciseService.batchSaveAnswers(answer, HttpUtils.getRealIP(request));
+    }
+
+    @RequestMapping("/exercise/existAnswers")
+    @ResponseBody
+    public boolean checkIsExistsAnswers(int exerciseId,String userId) {
+        return exerciseService.checkIsExistsAnswers(exerciseId,userId);
+    }
+
+    @RequestMapping("/exercise/answers")
+    @ResponseBody
+    public List getSubmitAnswers(int exerciseId,String userId) {
+        return exerciseService.getAnswers(exerciseId,userId);
+    }
+
+
+    /**
+     * 只返回必要信息，避免 hibernate 级联取出过多无用数据，降低效率
+     * @param exerciseId
+     * @return
+     */
+    @RequestMapping("/exercise/sharp/{exerciseId}")
+    @ResponseBody
+    public List getSharpExercise(@PathVariable("exerciseId") int exerciseId) {
+        return exerciseService.getSharpExercise(exerciseId);
+    }
+
+
+    /**
+     * 上传答案图片
+     * @param multipartFile
+     * @return
+     */
+    @RequestMapping("/upload/answerPic")
+    @ResponseBody
+    public String uploadAnswerPic(@RequestParam("pic") MultipartFile multipartFile) {
+        return UploadFile.uploadFile(multipartFile,"answer-img/");
     }
 }
 

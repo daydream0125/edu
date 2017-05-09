@@ -3,26 +3,29 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <title>作业管理</title>
     <%@include file="../../static.jsp" %>
     <style>
-        .p {
-            color: red;
-            font-size: 20px
-        }
     </style>
 </head>
 <body>
 <%@include file="../../navigation.jsp" %>
 <div id="app" class="container">
-    <br>
-    <Button-group shape="circle">
+    <div style="color: #004772;font-weight: bold">
+        <span>当前位置：</span>
+        <a href="">首页</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="javascript:">作业管理</a>
+        <hr>
+    </div>
+    <div style="float: right;margin-right: 100px;height: 40px">
         <i-button type="primary" size="large" @click="goToAddExercise">
             新增作业
         </i-button>
-        <i-button type="primary" size="large">
-            后退
-        </i-button>
-    </Button-group>
+    </div>
+
+    <div>
+
     <table class="table">
         <thead>
         <tr>
@@ -68,13 +71,12 @@
         </tr>
         </tbody>
     </table>
+    </div>
     <br>
-    <Row>
-        <i-col offset="14">
-            <Page :total="exercisesLen" @on-change="fetchData" show-total :page-size="pageSize" show-elevator>
-            </Page>
-        </i-col>
-    </Row>
+    <div style="float: right">
+        <Page :total="exercisesLen" @on-change="fetchData" show-total :page-size="pageSize" show-elevator>
+        </Page>
+    </div>
     <br>
     <div id="moreInfo" v-if="showMoreInfo">
         <i-menu mode="horizontal" theme="light" active-name="1" @on-select="changeMenu">
@@ -181,7 +183,7 @@
                 this.getSubmitCount();
                 this.getJudgeCount();
             },
-            getExercisesByTeacherId(teacherId) {
+            getExercisesByTeacherId:function(teacherId) {
                 $.ajax({
                     type: 'get',
                     url: 'teacher/' + this.teacherId + '/exercises',

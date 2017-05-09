@@ -4,17 +4,22 @@
 <head>
     <title>增加课程章节信息</title>
     <style>
-        p{
-            font-size: 20px;
-            font-weight: 800;
-        }
     </style>
 </head>
 <body>
 <%@include file="../../navigation.jsp" %>
 
 <div class="container" id="container">
-    <h1>增加课程章节信息</h1>
+    <div style="color: #004772;font-weight: bold">
+        <span>当前位置：</span>
+        <a href="">首页</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="teacher/courseList">课程管理</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="javascript:">新增章节信息</a>
+        <hr>
+    </div>
+    <h1 style="text-align: center">增加课程章节信息</h1>
     <br>
     <i-form>
         <Form-item>

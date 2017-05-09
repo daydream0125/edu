@@ -45,6 +45,7 @@ public class ChapterContentDAO {
 	}
 
 
+
 	public void update(ChapterContent chapterContent) {
 		getSession().update(chapterContent);
 	}

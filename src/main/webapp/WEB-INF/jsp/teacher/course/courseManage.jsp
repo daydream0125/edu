@@ -4,26 +4,34 @@
 <head>
     <title>课程信息</title>
     <style>
-        p {
-            color: #0f0f0f;
-            font-size: 20px
-        }
 
-        table {
-            color: #0f0f0f;
-            font-size: 20px
-        }
     </style>
 </head>
 <body>
 <%@include file="../../navigation.jsp" %>
 <div id="container" class="container">
-    <h1>{{course.courseName}}</h1>
-    <p>简介:{{course.courseDescription}}
-    </p>
-    <sec:authorize access="hasRole('ROLE_TEACHER')">
-        <i-button type="primary" size="large" @click="goToChapters">查看课程内容</i-button>
-    </sec:authorize>
+    <div style="color: #004772;font-weight: bold">
+        <span>当前位置：</span>
+        <a href="">首页</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="teacher/courseList">课程管理</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="javascript:">班级管理</a>
+        <hr>
+    </div>
+    <div style="float: right;margin-right: 100px">
+        <sec:authorize access="hasRole('ROLE_TEACHER')">
+            <i-button type="primary" size="large" @click="goToChapters">查看课程内容</i-button>
+        </sec:authorize>
+    </div>
+    <div style="margin-top: 20px">
+        <h1>{{course.courseName}}</h1>
+        <br>
+        <p>简介:{{course.courseDescription}}
+        </p>
+    </div>
+
+
     <br>
     <div id="menu">
         <i-menu mode="horizontal" theme="light" active-name="1" @on-select="changeMenu">
@@ -98,7 +106,7 @@
                         <Tag type="border" color="green">已开放</Tag>
                     </td>
                     <td v-else>
-                        <i-button type="ghost" @click="openRegister(clazz.classId)">点击开放</i-button>
+                        <i-button type="primary" @click="openRegister(clazz.classId)">点击开放</i-button>
                     </td>
                 </sec:authorize>
             </tr>
@@ -146,43 +154,46 @@
     <Modal v-model="reviewRegister" :closable="false" :mask-closable="false" width="800" @on-ok="submitRegisters">
         <p>选择班级</p>
         <i-select @on-change="showRegisters" size="large">
-            <i-option v-for="clazz in clazzes" :value="clazz.classId" >
+            <i-option v-for="clazz in clazzes" :value="clazz.classId">
                 {{clazz.className}}
             </i-option>
         </i-select>
         <table class="table">
             <thead>
-                <tr>
-                    <th>id</th>
-                    <th>姓名</th>
-                    <th>学号</th>
-                    <th>操作</th>
-                    <th><i-button @click="approveAll" type="primary">全部通过审核</i-button></th>
-                </tr>
+            <tr>
+                <th>id</th>
+                <th>姓名</th>
+                <th>学号</th>
+                <th>操作</th>
+                <th>
+                    <i-button @click="approveAll" type="primary">全部通过审核</i-button>
+                </th>
+            </tr>
             </thead>
             <tbody>
-                <tr v-for="c in registers">
-                    <td>{{c.account.userId}}</td>
-                    <td>{{c.account.name}}</td>
-                    <td>{{c.account.userInfo.cardNumber}}</td>
-                    <td>
-                        <i-button type="primary" @click="approve(c.classmateId)">通过审核</i-button>
-                    </td>
-                </tr>
+            <tr v-for="c in registers">
+                <td>{{c.account.userId}}</td>
+                <td>{{c.account.name}}</td>
+                <td>{{c.account.userInfo.cardNumber}}</td>
+                <td>
+                    <i-button type="primary" @click="approve(c.classmateId)">通过审核</i-button>
+                </td>
+            </tr>
             </tbody>
         </table>
         点击下方确认按钮后,上述操作才能生效
     </Modal>
     <Modal v-model="uploadExcel" :closable="false" :mask-closable="false" width="500">
         <p>选择班级</p>
-        <i-select  size="large" v-model="importClassId">
-            <i-option v-for="clazz in clazzes" :value="clazz.classId" >
+        <i-select size="large" v-model="importClassId">
+            <i-option v-for="clazz in clazzes" :value="clazz.classId">
                 {{clazz.className}}
             </i-option>
         </i-select>
         注意:上传的 Excel 需要保证第一列即为学号
         文件应添加后缀名(xls or xlsx), 以便后台选择特定方式解析
-        <Upload type="drag" action="teacher/importStudent" :data="{'classId':importClassId}" name="excel" :on-success="handleSuccess">
+        <Upload type="drag" action="teacher/importStudent" :data="{'classId':importClassId}" name="excel"
+                :on-success="handleSuccess">
             <div style="padding: 20px 0">
                 <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
                 <p>点击或将文件拖拽到这里上传</p>
@@ -197,28 +208,8 @@
 </div>
 
 <%@include file="../../js.jsp" %>
+<script src="static/dateFormat.js"></script>
 <script>
-    // 对Date的扩展，将 Date 转化为指定格式的String
-    // 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
-    // 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
-    // 例子：
-    // (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423
-    // (new Date()).Format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18
-    Date.prototype.Format = function (fmt) {
-        let o = {
-            "M+": this.getMonth() + 1, //月份
-            "d+": this.getDate(), //日
-            "H+": this.getHours(), //小时
-            "m+": this.getMinutes(), //分
-            "s+": this.getSeconds(), //秒
-            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-            "S": this.getMilliseconds() //毫秒
-        };
-        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        for (let k in o)
-            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-        return fmt;
-    };
     new Vue({
         el: '#container',
         data: {
@@ -231,17 +222,17 @@
             addClass: false,
             reviewRegister: false,
             registers: [],
-            approveRegisters:[],
+            approveRegisters: [],
             className: '',
             startTime: '',
             endTime: '',
             examTime: '',
             scorePercent: '',
             isPublicRegister: false,
-            uploadExcel:false,
-            importClassId:0,
-            returnData:[],
-            showErrorList:false
+            uploadExcel: false,
+            importClassId: 0,
+            returnData: [],
+            showErrorList: false
         },
         methods: {
             getCourseInfo: function (courseId) {
@@ -295,27 +286,27 @@
                     this.registers = data;
                 }.bind(this));
             },
-            approve:function (id) {
+            approve: function (id) {
                 for (let i = 0; i < this.registers.length; i++) {
                     if (this.registers[i].classmateId === id) {
                         this.approveRegisters.push(id);
                         //删除该元素
-                        this.registers.splice(i,1);
+                        this.registers.splice(i, 1);
                         break;
                     }
                 }
             },
-            approveAll:function () {
+            approveAll: function () {
                 //for in 不能注入????
-                for ( let i = 0; i < this.registers.length; i++) {
+                for (let i = 0; i < this.registers.length; i++) {
                     this.approveRegisters.push(this.registers[i].classmateId);
                 }
                 //清空 register
                 this.registers = [];
             },
-            submitRegisters:function () {
+            submitRegisters: function () {
                 if (this.approveRegisters.length !== 0) {
-                    $.post("teacher/approveRegisters",{approveRegisters:this.approveRegisters},function (data) {
+                    $.post("teacher/approveRegisters", {approveRegisters: this.approveRegisters}, function (data) {
                         if (data === true) {
                             alert("审核成功!");
                         } else {
@@ -324,14 +315,14 @@
                     })
                 }
             },
-            handleSuccess:function (data) {
+            handleSuccess: function (data) {
                 if (data[0] === "success") {
                     if (data.length === 1) {
                         alert("上传成功!");
                     } else {
-                        data.splice(0,1);
+                        data.splice(0, 1);
                         this.returnData = data;
-                        this.showErrorList  = true;
+                        this.showErrorList = true;
                     }
 
                 } else {
@@ -363,6 +354,12 @@
             formatIsFinish: function (flag) {
                 return flag === true ? '已结课' : '正在进行';
             }
+        }
+    });
+    new Vue({
+        el:'#teacher-course',
+        data:{
+            isActive:true
         }
     })
 </script>

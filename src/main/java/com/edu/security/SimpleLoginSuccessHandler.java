@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.edu.annotation.SystemControllerLog;
 import com.edu.dao.AccountDAO;
 import com.edu.model.Account;
+import com.edu.utils.HttpUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -75,7 +76,7 @@ public class SimpleLoginSuccessHandler implements AuthenticationSuccessHandler, 
         try {
             //从spring security中获得用户id，然后从数据库中取出该account，更新相关信息，放入session中
             account = accountDAO.findByUserId(user.getUsername());
-            String ip = this.getIpAddress(request);
+            String ip = HttpUtils.getRealIP(request);
             //将该次登录时间和登录ip写入数据库
             account.setLastLoginTime(new Date());
             account.setLoginIp(ip);
@@ -88,25 +89,7 @@ public class SimpleLoginSuccessHandler implements AuthenticationSuccessHandler, 
         }
     }
 
-    public String getIpAddress(HttpServletRequest request) {
-        String ip = request.getHeader("x-forwarded-for");
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_CLIENT_IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        return ip;
-    }
+
 
     public void setDefaultTargetUrl(String defaultTargetUrl) {
         this.defaultTargetUrl = defaultTargetUrl;

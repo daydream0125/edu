@@ -3,6 +3,7 @@ package com.edu.model;
 
 
 import com.edu.utils.CustomDateSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -26,7 +27,8 @@ public class Exercise {
     private Date endTime;
     private Date examTime;
     private Short reserved;
-    private Boolean isRelease;
+    private Boolean isRelease = false;
+    private Boolean judge = false;
     private Course course;
     private Account teacher;
     private Clazz clazz;
@@ -126,6 +128,16 @@ public class Exercise {
         isRelease = release;
     }
 
+    @Basic
+    @Column(name="judge")
+    public Boolean getJudge() {
+        return judge;
+    }
+
+    public void setJudge(Boolean judge) {
+        this.judge = judge;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -192,6 +204,7 @@ public class Exercise {
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "exercise_problem",joinColumns = {@JoinColumn(name = "exerciseID")},
             inverseJoinColumns = @JoinColumn(name = "problemID"))
+    @JsonIgnore
     public Set<Problem> getProblems() {
         return problems;
     }

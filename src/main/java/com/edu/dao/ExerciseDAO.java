@@ -77,4 +77,14 @@ public class ExerciseDAO  {
 		return (Long) query.uniqueResult();
 	}
 
+	public boolean getJudge(int exerciseId) {
+		return (boolean) getSession().createQuery("select judge from Exercise e where e.exerciseId=?").setInteger(0,exerciseId).uniqueResult();
+	}
+
+	public List getSharpExercise(int exerciseId) {
+		return getSession()
+				.createQuery("select e.exerciseName from Exercise  e where e.exerciseId=?")
+				.setInteger(0,exerciseId)
+				.list();
+	}
 }

@@ -3,6 +3,7 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <title>我的课程</title>
     <%@include file="../static.jsp" %>
     <style>
         body {
@@ -10,15 +11,24 @@
             font-size: medium;
         }
 
-        .badge-green {
-            background: green;
+        .list-item {
+            border-bottom: 1px dashed rgb(207, 208, 209);
+            height: 36px;
+            line-height: 36px;
+            margin-left: 400px;margin-right: 100px
         }
     </style>
 </head>
 <body>
 <%@include file="../navigation.jsp" %>
 <div id="app" class="container">
-    <br>
+    <div  style="color: #004772;font-weight: bold;margin-bottom: 20px">
+        <span>当前位置：</span>
+        <a href="">首页</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="javascript:">我的课程</a>
+        <hr>
+    </div>
     <table class="table table-hover">
         <thead>
         <tr>
@@ -71,36 +81,36 @@
             <Tabs value="name1">
                 <Tab-pane label="班级信息" name="name1">
                     <!--  课程信息 -->
-                    <ur>
-                        <li>课程名称： {{clazzInfo.course.courseName}}</li>
-                        <li>班级名称： {{clazzInfo.className}}</li>
-                        <li>班级人数：
+                    <ul>
+                        <li class="list-item">课程名称： {{clazzInfo.course.courseName}}</li>
+                        <li class="list-item">班级名称： {{clazzInfo.className}}</li>
+                        <li class="list-item">班级人数：
                             <Tag color="green">{{classmatesNum}}</Tag>
                             <i-button type="primary" @click="getClassmatesByClassId(clazzInfo.classId)">查看同学</i-button>
                         </li>
-                        <li>创建时间： {{clazzInfo.createTime}}</li>
-                        <li>成绩比例： {{clazzInfo.scorePercent | formatScorePercent}}</li>
-                    </ur>
+                        <li class="list-item">创建时间： {{clazzInfo.createTime}}</li>
+                        <li class="list-item">  成绩比例： {{clazzInfo.scorePercent | formatScorePercent}}</li>
+                    </ul>
                 </Tab-pane>
                 <!--  教师信息 -->
                 <Tab-pane label="老师信息" name="name2">
-                    <ur>
-                        <li>账号：{{teacher.userId}}</li>
-                        <li>姓名：{{teacher.name}}</li>
-                        <li>性别：{{teacher.userInfo.sex}}</li>
-                        <li>学校：{{teacher.userInfo.major.name}}</li>
-                        <li>邮箱：{{teacher.userInfo.email}}</li>
-                        <li>手机：{{teacher.userInfo.telephone}}</li>
-                        <li>地址：{{teacher.userInfo.address}}</li>
-                    </ur>
+                    <ul>
+                        <li class="list-item">账号：{{teacher.userId}}</li>
+                        <li class="list-item">姓名：{{teacher.name}}</li>
+                        <li class="list-item"> 性别：{{teacher.userInfo.sex}}</li>
+                        <li class="list-item">学校：{{teacher.userInfo.major.name}}</li>
+                        <li class="list-item">邮箱：{{teacher.userInfo.email}}</li>
+                        <li class="list-item">手机：{{teacher.userInfo.telephone}}</li>
+                        <li class="list-item">地址：{{teacher.userInfo.address}}</li>
+                    </ul>
                 </Tab-pane>
                 <!-- 成绩信息 -->
                 <Tab-pane label="成绩信息" name="name3">
-                    <ur>
-                        <li>平时成绩：{{classmate.regularScore | formatScore}}</li>
-                        <li>考试成绩：{{classmate.paperScore | formatScore}}</li>
-                        <li>总成绩：{{classmate.ultimateScore | formatScore}}</li>
-                    </ur>
+                    <ul>
+                        <li class="list-item">平时成绩：{{classmate.regularScore | formatScore}}</li>
+                        <li class="list-item">考试成绩：{{classmate.paperScore | formatScore}}</li>
+                        <li class="list-item">总成绩：{{classmate.ultimateScore | formatScore}}</li>
+                    </ul>
                 </Tab-pane>
             </Tabs>
         </div>

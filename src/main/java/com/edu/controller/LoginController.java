@@ -44,34 +44,17 @@ public class LoginController {
         this.accountMsgService = accountMsgService;
     }
 
-    /*
-          安全监测交由spring security 完成。
-          login方法只返回对应的视图
-          loginError返回对应的错误信息
-          logout返回注销提示信息。
-    */
-    //默认主页
-//    @RequestMapping(value={"/index","/"})
-//    public String index() {
-//        return "index";
-//    }
-
-    @RequestMapping("/login")
+    @RequestMapping("/sign")
     public String login() {
-        return "user/login";
+        return "user/sign";
     }
 
-    //当用户请求通过了spring security后，转向mainmenu，由springmvc完成视图的转发与渲染
-    @RequestMapping("/mainmenu")
-    public String goToMainMenu() {
-        return "mainmenu";
-    }
 
     @SystemControllerLog(description = "登录失败")
     //没有通过spring security，提示错误信息
     @RequestMapping("/loginError")
     public String handleLoginError() {
-        return "redirect:login?error=true";
+        return "redirect:sign?error=true";
     }
 
 
@@ -79,31 +62,28 @@ public class LoginController {
     //注销，向前台传递注销成功信息
     @RequestMapping("/logout")
     public String logout() {
-        return "redirect:login?message=You successfully logout.";
+        return "redirect:sign?message=You successfully logout.";
     }
 
-    @RequestMapping("/register")
-    public String register() {
-        return "user/register";
-    }
 
     @SystemControllerLog(description = "注册")
-    @RequestMapping("/register_info")
+    @RequestMapping("/register")
+    @ResponseBody
     public String addUser(String username, String password, String code, HttpSession session) {
         //验证码填写错误
         if (! code.equalsIgnoreCase((String) session.getAttribute(Constants.KAPTCHA_SESSION_KEY)))
-            return "redirect:register?codeError=true";
+            return "codeError";
         //注册账号已注册
         if (accountMsgService.accountIsExist(username))
-            return "redirect:register?accountIsExist=true";
+            return "accountExistError";
         //保存账号信息
         accountMsgService.saveAccount(username,password);
-        return "redirect:login";
+        return "成功";
     }
 
 
     //生成验证码，并存入session中
-    @RequestMapping(value = "captcha-image")
+    @RequestMapping(value = "/captcha-image")
     public ModelAndView getKaptchaImage(HttpServletRequest request, HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
         String code = (String)session.getAttribute(Constants.KAPTCHA_SESSION_KEY);

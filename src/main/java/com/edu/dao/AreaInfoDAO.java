@@ -19,6 +19,7 @@ public class AreaInfoDAO extends HibernateDaoSupport {
 	public static final String AREA_NAME = "areaName";
 	public static final String PARENT_ID = "parentId";
 
+
 	//为HibernateDaoSupport注入sessionFactory
 	@Autowired
 	public void setSuperSessionFactory(SessionFactory sessionFactory){

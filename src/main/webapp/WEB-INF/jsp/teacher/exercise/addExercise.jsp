@@ -7,8 +7,17 @@
 <body>
 <%@include file="../../navigation.jsp" %>
 <div class="container" id="container">
+    <div style="color: #004772;font-weight: bold">
+        <span>当前位置：</span>
+        <a href="">首页</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="teacher/exerciseManage">作业管理</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="javascript:">新增</a>
+        <hr>
+    </div>
     <div>
-        <h1>添加作业</h1>
+        <h1 style="text-align: center">新增作业</h1>
         <p>课程 班级</p>
         <i-select style="width:300px" @on-change="showClasses" size="large" v-model="courseId">
             <i-option v-for="course in courses" :value="course.courseId">{{ course.courseName }}</i-option>

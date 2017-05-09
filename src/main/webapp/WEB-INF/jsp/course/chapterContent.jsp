@@ -15,8 +15,16 @@
 <body>
 <%@include file="../navigation.jsp" %>
 <div class="container" id="container">
-    <h1>课程内容</h1>
-    <br>
+    <div  style="color: #004772;font-weight: bold">
+        <span>当前位置：</span>
+        <a href="">首页</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="javascript:" @click="goToChapters">课程内容</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="javascript:">章节信息</a>
+        <hr>
+    </div>
+    <div style="float: right;margin-right: 100px">
     <sec:authorize access="hasRole('ROLE_TEACHER')">
         <i-button type="primary" size="large" @click="update">更新章节信息</i-button>
         <i-button type="primary" size="large" @click="upload">上传视屏</i-button>
@@ -25,10 +33,8 @@
         <i-button type="primary" size="large" @click="showVideo = true" v-if="content.videoPath !== null">观看视屏</i-button>
         <i-button type="primary" size="large" @click="goToChapters">返回章节信息</i-button>
     </sec:authorize>
-    <%--<pre width="120" style="word-wrap : break-word;word-break: normal;background-color: white;white-space:pre-wrap;border: 0px">--%>
-        <%--{{content.content}}</pre>--%>
-    <br>
-    <br>
+    </div>
+    <div style="margin-top: 60px">
     <h1 class="title">第{{content.courseChapter.num}}节&nbsp;{{content.courseChapter.title}}</h1>
     <Row>
         <i-col offset="20">
@@ -36,6 +42,7 @@
         </i-col>
     </Row>
     <div v-html="content.content">
+    </div>
     </div>
     <br>
     <br>

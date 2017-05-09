@@ -39,6 +39,7 @@ public class CourseDAO{
 		return query.list();
 	}
 
+
 	public Course getCourseById(int Id) {
 		return (Course) getSession().get(Course.class,Id);
 	}
@@ -53,11 +54,21 @@ public class CourseDAO{
 	}
 
 	public List getAllCourse() {
-		String hql = "from Course";
+		String hql = "select c.courseId,c.courseName,c.courseDescription,c.coursePic from Course c order by c.isFinish,c.startTime";
 		Query query = getSession().createQuery(hql);
 		return query.list();
 	}
 
 
+	public String getCourseName(int courseId) {
+		return getCourseById(courseId).getCourseName();
+	}
 
+	public List getSharpCourse(int courseId) {
+		return  getSession()
+				.createQuery("select c.courseName,c.courseDescription from Course c" +
+						" where c.courseId=?")
+				.setInteger(0,courseId)
+				.list();
+	}
 }

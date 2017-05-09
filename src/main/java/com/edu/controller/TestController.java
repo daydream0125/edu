@@ -1,9 +1,12 @@
 package com.edu.controller;
 
+import com.edu.annotation.SystemControllerLog;
 import com.edu.dao.ProblemDAO;
 import com.edu.model.Account;
 import com.edu.model.ChapterContent;
 import com.edu.service.CourseService;
+import com.edu.service.TestService;
+import org.apache.poi.util.SystemOutLogger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +21,8 @@ public class TestController {
     private CourseService courseService;
     @Resource
     private ProblemDAO problemDAO;
+    @Resource
+    private TestService testService;
     @RequestMapping("/test")
     public String page() {
         return "test/test";
@@ -59,10 +64,15 @@ public class TestController {
 
    @RequestMapping("testLogin")
    public String loginTest() {
-        return "user/loginTest";
+        return "user/sign";
    }
 
 
+   @SystemControllerLog(description = "测试")
+   @RequestMapping("/testLog/{id}")
+   public void testLog(@PathVariable("id") int id) {
+        testService.test(id);
+    }
 
 
 

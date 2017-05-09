@@ -8,32 +8,32 @@
 <%@include file="../../navigation.jsp"%>
 
 <div class="container" id="container">
-    <br>
-    <Button-group shape="circle">
+    <div style="color: #004772;font-weight: bold">
+        <span>当前位置：</span>
+        <a href="">首页</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="javascript:">题库管理</a>
+        <hr>
+    </div>
+    <div style="float: right;">
         <i-button type="primary" size="large" @click="goToAddProblem">
             新增题目
-        </i-button>
-        <i-button type="primary" size="large" >
-            搜索
         </i-button>
         <i-button type="primary" size="large" @click="goToProblemList" >
             查看题库
         </i-button>
-    </Button-group>
-        <br>
-        <br>
-        <br>
+    </div>
     <Row type="flex" justify="center">
             <i-col span="8">
-                <i-input size="large" style="width: 500px;" placeholder="输入小节名称" v-model="keywords">
+                <i-input size="large" style="width: 500px;" placeholder="输入小节名称以查询" v-model="keywords">
                     <i-button slot="append" icon="search" @click="search1">搜索</i-button>
                 </i-input>
-
             </i-col>
         </Row>
     <br>
     <br>
     <div v-if="showSearchResult">
+        <div>
         <table class="table table-hover" >
             <thead>
             <tr>
@@ -45,19 +45,18 @@
             </thead>
             <tbody>
             <tr v-for="res in currentResult">
-                <td>{{res.title}}</td>
-                <td>{{getProblemCount(res.id)}}</td>
-                <td>{{res.course.courseName}}</td>
-                <td><i-button type="primary" @click="viewProblem(res.id)">查看题目</i-button></td>
+                <td>{{res[1]}}</td>
+                <td>{{getProblemCount(res[0])}}</td>
+                <td>{{res[2]}}</td>
+                <td><i-button type="primary" @click="viewProblem(res[0])">查看题目</i-button></td>
             </tr>
             </tbody>
         </table>
-        <Row>
-            <i-col offset="12">
-                <Page :total="resultLen" @on-change="fetchData" show-total :page-size="pageSize" show-elevator>
-                </Page>
-            </i-col>
-        </Row>
+        </div>
+        <div style="float: right">
+            <Page :total="resultLen" @on-change="fetchData" show-total :page-size="pageSize" show-elevator>
+            </Page>
+        </div>
     </div>
 
 </div>

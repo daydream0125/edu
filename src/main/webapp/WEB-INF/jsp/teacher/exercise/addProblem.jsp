@@ -7,6 +7,15 @@
 <body>
 <%@include file="../../navigation.jsp" %>
 <div class="container" id="container">
+    <div style="color: #004772;font-weight: bold">
+        <span>当前位置：</span>
+        <a href="">首页</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="teacher/exercise/problemManage">题库管理</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="javascript:">新增</a>
+        <hr>
+    </div>
     <div>
         <i-form :label-width="80">
             <h3>选择章节</h3>

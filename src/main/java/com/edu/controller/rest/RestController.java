@@ -1,12 +1,13 @@
 package com.edu.controller.rest;
 
 import com.edu.model.Exercise;
+import com.edu.model.Problem;
+import com.edu.service.ClazzService;
 import com.edu.service.CourseService;
 import com.edu.service.ExerciseService;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -17,6 +18,9 @@ public class RestController {
     private CourseService courseService;
     @Resource
     private ExerciseService exerciseService;
+
+    @Resource
+    private ClazzService clazzService;
 
     @RequestMapping("/chapters/{courseId}")
     public List getChaptersByCourseId(@PathVariable("courseId") int courseId) {
@@ -50,5 +54,18 @@ public class RestController {
         return exerciseService.getProblemBySectionId(sectionId);
     }
 
+    @RequestMapping(value = "/problem/{problemId}",method = RequestMethod.GET)
+    public Problem getProblemById(@PathVariable("problemId") int problemId) {
+        return exerciseService.getProblemById(problemId);
+    }
 
+    /**
+     * 辅助查询
+     */
+
+
+    @RequestMapping("userToClassmate")
+    public int userToClassmate(int exerciseId,String userId) {
+        return exerciseService.getClassmateIdByExerciseAndUser(exerciseId,userId);
+    }
 }

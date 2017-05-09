@@ -1,3 +1,4 @@
+import com.alibaba.fastjson.JSON;
 import com.edu.dao.CourseDAO;
 import com.edu.model.Course;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -8,6 +9,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.aspectj.weaver.ast.Var;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -70,6 +73,18 @@ public class AppTest {
         System.out.println(new Timestamp(System.currentTimeMillis()));
     }
 
+
+    @Test
+    public void testLog() {
+        final Logger logger = LoggerFactory.getLogger(AppTest.class);
+        logger.warn("fuck you");
+        logger.error("abc");
+    }
+
+    @Test
+    public void testJson() {
+        System.out.println(JSON.toJSONString("123"));
+    }
 
 
 

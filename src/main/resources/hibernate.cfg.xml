@@ -23,6 +23,7 @@
     <mapping class="com.edu.model.ChapterContent"/>
     <mapping class="com.edu.model.CourseChapter"/>
     <mapping class="com.edu.model.Log"/>
+    <mapping class="com.edu.model.Notice"/>
 
 
 </session-factory>

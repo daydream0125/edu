@@ -1,6 +1,5 @@
 package con.kotlin
 
-import com.edu.dao.ClassmateDAO
 import com.edu.model.*
 import com.edu.service.AccountMsgService
 import com.edu.service.ClazzService
@@ -11,10 +10,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.annotation.Resource
-import kotlin.collections.ArrayList
 
 @RunWith(SpringJUnit4ClassRunner::class)
 @ContextConfiguration(locations = arrayOf("classpath:spring-test.xml", "classpath:applicationContext-hibernate.xml"))
@@ -99,7 +96,7 @@ class Test {
             problemsId[i] = (list?.get(i) as? Problem)?.problemId ?: 0
         }
         for (i in 4..29) {
-            exerciseService?.addProbemsToExercise(problemsId, i)
+            exerciseService?.addProblemsToExercise(problemsId, i)
         }
 
     }
@@ -155,6 +152,29 @@ class Test {
         }
         println(list?.size)
     }
+
+
+
+    @Test
+    fun testMarkExercise() {
+        for (i in 2..29) {
+            exerciseService?.markObjectiveProblem(i)
+        }
+    }
+
+    @Test
+    fun testCountScore() {
+        for (i in 2..29) {
+            exerciseService?.countScore(i)
+        }
+    }
+
+    @Test
+    fun testUpdateScore() {
+        var random = (Math.random() * 10).toInt() % 4
+
+    }
+
 
 
 }

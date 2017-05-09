@@ -5,23 +5,26 @@
 <head>
     <title>个人信息</title>
     <style>
-        hr {
-            display: block;
-            -webkit-margin-before: 0.5em;
-            -webkit-margin-after: 0.5em;
-            -webkit-margin-start: auto;
-            -webkit-margin-end: auto;
-            border-style: inset;
-            border-width: 1px;
-        }
+
     </style>
 </head>
 <body>
 <%@include file="../navigation.jsp" %>
 <div class="container" id="container">
-    <i-button type="primary" size="large" @click="updateInfo">更新个人信息</i-button>
+    <div  style="color: #004772;font-weight: bold">
+        <span>当前位置：</span>
+        <a href="">首页</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="javascript:">个人信息</a>
+        <hr>
+    </div>
+
     <div style="height: 350px">
+
         <Row>
+            <div style="float: right;margin-right: 100px">
+                <i-button type="primary" size="large" @click="updateInfo">更新个人信息</i-button>
+            </div>
             <i-col span="2">
                 <img :src="user.userInfo.photo" style="width: 150px;height: 180px">
             </i-col>
@@ -90,7 +93,7 @@
     new Vue({
         el: "#container",
         data: {
-            userId:${sessionScope.account.userId},
+            userId:'${sessionScope.account.userId}',
             user: {},
         },
         methods: {

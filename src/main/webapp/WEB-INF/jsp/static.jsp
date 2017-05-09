@@ -15,13 +15,37 @@
         margin-top: 70px;
         font-size: medium;
         color: black;
+        background-color: #eaeff2;
     }
     p{
         color: #0f0f0f;
-        font-size: 20px
+        font-size: 16px
     }
     table {
         color: #0f0f0f;
         font-size: 20px
     }
+    hr {
+        display: block;
+        -webkit-margin-before: 0.5em;
+        -webkit-margin-after: 0.5em;
+        -webkit-margin-start: auto;
+        -webkit-margin-end: auto;
+        border: 1px inset;
+    }
+    a {
+        color: #333;
+        text-decoration: none;
+        /*text-decoration-style: initial;*/
+        /*text-decoration-color: initial;*/
+        font-weight: bold;
+    }
+    ul {
+       list-style-type:square;
+    }
+    a:hover {color: #ff9322;
+        text-decoration: none;
+    }
+
+
 </style>

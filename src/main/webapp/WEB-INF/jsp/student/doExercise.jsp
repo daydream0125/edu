@@ -8,9 +8,19 @@
 <body>
 <%@include file="../navigation.jsp" %>
 <div id="app" class="container">
-    <br>
-    <h1>本次练习共{{problemsLen}}道题</h1>
-    <br>
+    <div  style="color: #004772;font-weight: bold">
+        <span>当前位置：</span>
+        <a href="">首页</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="student/exerciseManage">我的作业</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="javascript:">做练习</a>
+        <hr>
+    </div>
+    <div style="margin-top: 20px;margin-bottom: 20px">
+        <h2>{{exercise[0]}}</h2>
+        <h4>本次练习共<Tag color="blue" type="border">{{problemsLen}}</Tag>道题</h4>
+    </div>
     <h4>进度:</h4>
     <i-progress :percent="(globalIndex+1)*(100/problemsLen)" status="active" :hide-info="true"></i-progress>
     <br>
@@ -45,8 +55,18 @@
     </div>
     <div v-else-if="currentProblem.type === 4">
         <!--  简答 -->
+        <Tooltip placement="bottom">
+            <Upload action="student/upload/answerPic" :on-success="handleAnswerPic" name="pic">
+                <i-button type="ghost" icon="ios-cloud-upload-outline">上传图片</i-button>
+            </Upload>
+            <div slot="content">
+                <p>选择图片作为答案时</p>
+                <p>以下<b>非必要信息</b>可不用编辑</p>
+            </div>
+        </Tooltip>
         <i-input v-model="answer" type="textarea" :rows="4" placeholder="参考答案" size="large"
         ></i-input>
+
     </div>
     <div v-else>
         <!--  编程 -->
@@ -55,7 +75,7 @@
     <Row>
         <i-col>
             <div v-if="globalIndex+1 < problemsLen">
-                <i-button type="primary" @click="fetchData" size="large" icon="ios-skipforward">下一题</i-button>
+                <i-button type="primary" @click="fetchData" size="large" icon="skipforward">下一题</i-button>
             </div>
             <div v-if="globalIndex+1 === problemsLen">
                 <i-button type="primary" @click="submit" size="large">提交答案</i-button>
@@ -79,6 +99,7 @@
         el: '#app',
         data: {
             exerciseId:${exerciseId},
+            exercise:{},
             problems: [],
             pageSize: 1,
             currentProblem: {},
@@ -86,11 +107,17 @@
             globalIndex: 0,          //全局 index, 指向当前答题的 index, 便于绑定 submitAnswer
             submitAnswers: [],      //所有题目的详细答案,包括开始 结束时间
             answer: '',             //题目答案
+            answerPic:'',
             message: false,
             problemsId: [], //向后台传递本次练习的problemId,
             submitSuccess: false
         },
         methods: {
+            getExercise:function () {
+              $.get("student/exercise/sharp/" + this.exerciseId,function (data) {
+                  this.exercise = data;
+              }.bind(this))
+            },
             getProblemsByExerciseId(exerciseId) {
                 $.ajax({
                     type: 'get',
@@ -103,7 +130,8 @@
                         this.submitAnswers.push({
                             startTime: new Date().Format("yyyy-MM-dd HH:mm:ss"),
                             endTime: '',
-                            answer: ''
+                            answer: '',
+                            answerPic:''
                         });
                         this.problemsId.push(this.currentProblem.problemId);
 
@@ -130,8 +158,10 @@
                 }
                 this.submitAnswers[this.globalIndex].endTime = new Date().Format("yyyy-MM-dd HH:mm:ss");
                 this.submitAnswers[this.globalIndex].answer = this.answer;
-                this.submitAnswers.push({startTime: new Date().Format("yyyy-MM-dd HH:mm:ss"), endTime: '', answer: ''});
+                this.submitAnswers[this.globalIndex].answerPic = this.answerPic;
+                this.submitAnswers.push({startTime: new Date().Format("yyyy-MM-dd HH:mm:ss"), endTime: '', answer: '',answerPic:''});
                 this.answer = '';
+                this.answerPic = '';
                 this.globalIndex++;
                 this.currentProblem = this.problems[this.globalIndex];
                 this.problemsId.push(this.currentProblem.problemId);
@@ -141,13 +171,14 @@
                 this.$Loading.start();
                 //处理最后一题
                 this.submitAnswers[this.globalIndex].answer = this.answer;
+                this.submitAnswers[this.globalIndex].answerPic = this.answerPic;
                 this.submitAnswers[this.globalIndex].endTime = new Date().Format("yyyy-MM-dd HH:mm:ss");
                 //当前用户的答案
                 let data = {
                     'userId':${sessionScope.account.userId},
                     'exerciseId': this.exerciseId,
                     'answers': this.submitAnswers,
-                    'problemsId': this.problemsId
+                    'problemsId': this.problemsId,
                 };
                 //持久化
                 $.ajax({
@@ -172,12 +203,20 @@
             },
             goToExercise: function () {
                 window.location.href = "${pageContext.request.contextPath}/student/exerciseManage"
-            }
+            },
+            handleAnswerPic: function (res) {
+                if (res !== "error") {
+                    this.answerPic = res;
+                } else {
+                    alert("上传失败!请重新上传或手动编辑")
+                }
+            },
 
         },
         //页面加载完成后获取 exerciseId 下的 全部problem
         mounted: function () {
             this.getProblemsByExerciseId(this.exerciseId);
+            this.getExercise();
         },
         filters: {
 

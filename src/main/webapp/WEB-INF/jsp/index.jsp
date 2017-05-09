@@ -9,7 +9,7 @@
         }
 
         .index-course {
-            height: 400px;
+            height: 250px;
             width: 100%;
             overflow: hidden;
         }
@@ -17,42 +17,31 @@
         .carousel-caption h1, h2, h3 {
             color: #0f0f0f;
         }
-
-        .course-block {
-            width: 350px;
-            height: 450px;
-            float: left;
-            overflow: hidden;
-        }
     </style>
 </head>
 <body>
 <%@include file="navigation.jsp" %>
 <div id="container">
-    <div id="carousel" class="carousel slide" data-ride="carousel">
-        <ol class="carousel-indicators">
-            <li data-target="#carousel" data-slide-to="0" class="active"></li>
-            <template v-for="n in 4">
-                <li data-target="#carousel" :data-slide-to="n"></li>
-            </template>
-        </ol>
+    <div id="carousel" class="carousel slide" data-ride="carousel" style="background: indexbg.png">
         <!-- Wrapper for slides -->
         <div class="carousel-inner" role="listbox">
             <div class="item active index-course">
                 <div class="carousel-caption">
                     <h1>注册以关注更多课程内容</h1>
-                    <i-button type="success" size="large" @click="register">立即注册</i-button>
+                    <div>
+                        <i-button type="success" size="large" @click="register">立即注册</i-button>
+                    </div>
                 </div>
             </div>
             <div class="item index-course" v-for="c in topCourses">
                 <div class="carousel-caption">
-                    <h1 style="color: #0f0f0f">{{c.courseName}}</h1>
+                    <h1 style="color: #0f0f0f">{{c[1]}}</h1>
                     <h3>
-                        {{c.courseDescription}}
+                        {{c[2]}}
                     </h3>
-                    <h2>开课老师：{{c.teacher.name}}</h2>
-                    <h3>时间：{{c.startTime}}--{{c.endTime}}</h3>
-                    <i-button size="large" type="success" @click="courseInfo(c.courseId)">查看详情</i-button>
+                    <div style="margin-top: 10px">
+                        <i-button size="large" type="success" @click="courseInfo(c[0])">查看详情</i-button>
+                    </div>
                 </div>
             </div>
 
@@ -69,21 +58,29 @@
         </a>
     </div>
     <div class="container">
+        <div  style="color: #004772;font-weight: bold;margin-top: 20px">
+            <span>当前位置：</span>
+            <a href="javascript:">首页</a>
+            <hr>
+        </div>
         <h1>全部课程</h1>
+        <div>
         <Card style="width:350px;height: 400px;float: left;margin-left: 10px;margin-top: 10px" v-for="c in courses">
             <p slot="title" style="font-size: 18px">
-                {{c.courseName}}
+                {{c[1]}}
             </p>
             <div style="width: 100%;height: 200px;overflow: hidden">
-                <img :src="c.coursePic" alt="" style="width: 100%;height: 200px;overflow: hidden">
+                <img :src="c[3]" alt="" style="width: 100%;height: 200px;overflow: hidden">
             </div>
             <div style="height: 90px;overflow: hidden">
-                <p style="font-size: 14px">{{c.courseDescription}}</p>
+                <p style="font-size: 14px">{{c[2]}}</p>
             </div>
             <div style="margin-bottom: 10px">
-            <i-button @click="courseInfo(c.courseId)" type="primary">查看详情</i-button>
+                <i-button @click="courseInfo(c[0])" type="primary">查看详情</i-button>
             </div>
         </Card>
+        </div>
+    </div>
     </div>
 </div>
 
@@ -96,8 +93,8 @@
             topCourses: [],
         },
         methods: {
-            register:function () {
-              window.location.href = "register";
+            register: function () {
+                window.location.href = "register";
             },
             courseInfo: function (courseId) {
                 window.location.href = "course/" + courseId;

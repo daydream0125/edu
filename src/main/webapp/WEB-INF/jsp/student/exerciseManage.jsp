@@ -13,6 +13,13 @@
 <body>
 <%@include file="../navigation.jsp" %>
 <div id="app" class="container">
+    <div  style="color: #004772;font-weight: bold">
+        <span>当前位置：</span>
+        <a href="">首页</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="javascript:">我的作业</a>
+        <hr>
+    </div>
     <br>
     <i-table :columns="exerciseColumn" :data="currentExercises" size="large">
 
@@ -39,7 +46,7 @@
         data: {
             userId:${sessionScope.account.userId},
             currentExercises: [], //当前页展示的练习
-            pageSize: 4,
+            pageSize: 7,
             showStartExercise: false,
             startExerciseId: 0,
             problemCount: 0,
@@ -111,6 +118,7 @@
                 {
                     title: '操作',
                     key: 'isFinish',
+
                     render (row, column, index) {
                         let endTime = `${'${'}row.endTime}`;
                         let now = new Date();

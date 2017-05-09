@@ -51,6 +51,7 @@ public class ClassmateDAO {
 
 
 
+
 	public List getClazzByUserId(String userId) {
 		String hql = "from Classmate where account.userId=:id";
 		Query query = getSession().createQuery(hql);

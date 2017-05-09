@@ -45,7 +45,7 @@
         <!-- authentication-failure-urljsp页面输入框名字必须与此相同 -->
         <!-- jsp页面输入框名字必须与此相同 -->
         <s:form-login login-page="/login"
-                      default-target-url="/mainmenu"
+                      default-target-url="/index"
                       login-processing-url="/j_security_check"
                       authentication-failure-url="/loginError"
                       authentication-success-handler-ref="authenticationSuccessHandler"

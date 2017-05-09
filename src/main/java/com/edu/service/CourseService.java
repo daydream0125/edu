@@ -186,5 +186,12 @@ public class CourseService {
     }
 
 
+    public String getCourseName(int courseId) {
+        return courseDAO.getCourseName(courseId);
 
+    }
+
+    public List getSharpCourse(int courseId) {
+        return courseDAO.getSharpCourse(courseId);
+    }
 }

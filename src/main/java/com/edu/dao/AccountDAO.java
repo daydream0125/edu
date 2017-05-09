@@ -49,4 +49,5 @@ public class AccountDAO{
 		return (Account) query.uniqueResult();
 	}
 
+
 }

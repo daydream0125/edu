@@ -8,29 +8,36 @@
 <%@include file="../../navigation.jsp" %>
 
 <div class="container" id="container">
-    <i-button type="primary" size="large" @click="markObjectiveProblem">批改客观题</i-button>
+    <i-button type="primary" size="large" @click="markObjectiveProblem" v-if="!isMark">批改客观题</i-button>
+    <i-button type="success" size="large" @click="countScore" v-if="!isMark">计算总分</i-button>
     <br>
     <br>
     <h1>主观题批改</h1>
-    <br>
-    <table v-if="!isMark" class="table table-hover">
-        <thead>
-        <tr>
-            <th>姓名</th>
-            <th>学号</th>
-            <th>操作</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="(c,index) in classmates">
-            <td>{{c.account.name}}</td>
-            <td>{{c.account.cardNumber}}</td>
-            <td>
-                <i-button type="primary" size="large" @click="mark(index)">批改作业</i-button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <div style="text-align: center" v-if="!isMark">
+        <h2>待批改学生</h2>
+        <br>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>姓名</th>
+                <th>学号</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-if="classmates.length === 0" style="text-align: center">
+                <td style="color: red">暂无可批改数据</td>
+            </tr>
+            <tr v-for="(c,index) in classmates">
+                <td>{{c.account.name}}</td>
+                <td>{{c.account.cardNumber}}</td>
+                <td>
+                    <i-button type="primary" size="large" @click="mark(index)">批改作业</i-button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
     <div v-if="isMark">
         <p>题目</p>
         <div v-if="activeAnswer.problem.problemPicPath !== 'none'">
@@ -46,11 +53,21 @@
         <div v-else>
             <pre>{{activeAnswer.answer}}</pre>
         </div>
-        <p>分数</p>
-        <Input-number :max="10" :min="1" v-model="scores[answerIndex]"></Input-number>
+        <p>分数
+            <Input-number :max="10" :min="1" v-model="scores[answerIndex]"></Input-number>
+        </p>
+
         <br>
-        <i-button v-if="answerIndex+1 < answersLen" @click="next">下一题</i-button>
-        <i-button v-if="answerIndex !== 0" @click="previous">上一题</i-button>
+        <br>
+        <Row>
+            <i-col span="2">
+                <i-button v-if="answerIndex !== 0" @click="previous" type="primary">上一题</i-button>
+            </i-col>
+            <i-col span="2">
+                <i-button v-if="answerIndex+1 < answersLen" type="primary" @click="next">下一题</i-button>
+            </i-col>
+
+        </Row>
         <br>
         <i-button v-if="answerIndex+1 === answersLen" @click="submit" type="success">提交</i-button>
     </div>
@@ -72,12 +89,22 @@
             isMark: false,
             scores: [],
             answerIndex: 0,
-            classmateIndex:0,
+            classmateIndex: 0,
             marking: false,
             markMessage: '正在批改，请稍后，待提示批改成功后点击确认按钮完成批改',
-            answersId:[]
+            answersId: []
         },
         methods: {
+            countScore: function () {
+                $.post("teacher/exercise/countScore", {exerciseId: this.exerciseId}, function (data) {
+                    if (data === true) {
+                        alert("计算成功");
+                    }
+                    else {
+                        alert("计算失败！请重新计算或与管理员联系")
+                    }
+                });
+            },
             next: function () {
                 this.activeAnswer = this.answers[++this.answerIndex];
             },
@@ -92,15 +119,15 @@
                 $.post("teacher/exercise/markSubjectiveProblem", {
                     scores: this.scores,
                     answersId: this.answersId,
-                },function (data) {
-                  if (data === true) {
-                      alert("批改成功");
-                      this.classmates.splice(this.classmateIndex,1);
-                  }   else {
-                      alert("批改失败")
-                  }
+                }, function (data) {
+                    if (data === true) {
+                        alert("批改成功");
+                        this.classmates.splice(this.classmateIndex, 1);
+                    } else {
+                        alert("批改失败")
+                    }
 
-                  this.isMark = false;
+                    this.isMark = false;
                 }.bind(this))
             },
             mark: function (index) {
@@ -149,7 +176,7 @@
         }
     });
     new Vue({
-        el: "#teacher-problem",
+        el: "#teacher-exercise",
         data: {
             isActive: true
         }

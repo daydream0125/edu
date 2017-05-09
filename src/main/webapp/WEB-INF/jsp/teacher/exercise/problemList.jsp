@@ -8,6 +8,15 @@
 <%@include file="../../navigation.jsp" %>
 
 <div class="container" id="container">
+    <div style="color: #004772;font-weight: bold">
+        <span>当前位置：</span>
+        <a href="">首页</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="teacher/exercise/problemManage">题库管理</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="javascript:">查看题目</a>
+        <hr>
+    </div>
     <p>筛选条件</p>
     课程
     <i-select style="width:300px" @on-change="showChapters" size="large">
@@ -26,9 +35,7 @@
     <br>
     <br>
     <hr>
-    <p>共
-        <Tag type="border" color="blue">{{problemsLen}}</Tag>
-        道题
+    <p v-if="problemsLen !== 0">共<Tag type="border" color="blue">{{problemsLen}}</Tag>道题
     </p>
     <br>
     <div class="panel panel-info" v-for="p in currentProblems">
@@ -37,21 +44,21 @@
             <h3 class="panel-title" v-if="p.title != null">{{p.title}}</h3>
         </div>
         <div class="panel-body">
-            <div v-if="p.problemPicPath != null">
+            <div v-if="p.problemPicPath != 'none'">
                 <p>题目:</p>
                 <img :src="p.problemPicPath">
             </div>
             <div v-else>
                 <div v-if="p.type === 1">
                     <div v-for="(c,index) in p.description.split('\n')">
-                        <i-input readonly  :value="c">
+                        <i-input readonly :value="c">
                             <span slot="prepend">{{index | formatChoose}}</span>
                         </i-input>
                     </div>
                 </div>
             </div>
             <p>参考答案:</p>
-            <div v-if="p.solutionPicPath != null  ">
+            <div v-if="p.solutionPicPath != 'none'  ">
                 <img :src="p.solutionPicPath">
             </div>
             <div v-else>
@@ -66,12 +73,10 @@
             </p>
         </div>
     </div>
-    <Row v-if="problemsLen !== 0">
-        <i-col offset="12">
-            <Page :total="problemsLen" @on-change="fetchData" show-total :page-size="pageSize" show-elevator>
-            </Page>
-        </i-col>
-    </Row>
+    <div style="float: right;margin-bottom: 40px" v-if="problemsLen !== 0">
+        <Page :total="problemsLen" @on-change="fetchData" show-total :page-size="pageSize" show-elevator>
+        </Page>
+    </div>
 </div>
 <%@include file="../../js.jsp" %>
 <script>
@@ -147,7 +152,7 @@
             showProblems: function (sectionId) {
                 this.filterProblems(3, sectionId);
             },
-            formatChoose: function (desc,index) {
+            formatChoose: function (desc, index) {
                 return desc.split('\n')[index];
             }
         },
@@ -157,7 +162,7 @@
             if (id !== 0) {
                 this.filterProblems(3, id);
             }
-        },filters:{
+        }, filters: {
             formatChoose: function (index) {
                 return String.fromCharCode(index + 65);
             }

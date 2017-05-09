@@ -10,18 +10,26 @@
             font-size: 20px;
             font-weight: 800;
             color: #0f0f0f;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
 <%@include file="../../navigation.jsp" %>
 <div class="container" id="container">
-    <p class="p">编辑</p>
-    <br>
+    <div  style="color: #004772;font-weight: bold">
+        <span>当前位置：</span>
+        <a href="">首页</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="javascript:" @click="click">章节信息</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="javascript:">更新</a>
+        <hr>
+    </div>
     <p class="p">第{{num}}节.{{title}}</p>
     <div id="content" style="height: 400px" v-html="chapterContent.content">
     </div>
-
+    <br>
     <i-button type="success" size="large" @click="submit">提交</i-button>
 
 </div> <!-- /container -->
@@ -59,6 +67,9 @@
                         alert("更新失败!");
                     }
                 }.bind(this))
+            },
+            click:function () {
+                window.location.href="course/chapterContentPage/" + this.sectionId;
             }
         },
         mounted: function () {
@@ -83,6 +94,12 @@
             editor.create();
         }
     });
+    new Vue({
+        el:'#teacher-course',
+        data:{
+            isActive:true
+        }
+    })
 </script>
 </body>
 </html>
