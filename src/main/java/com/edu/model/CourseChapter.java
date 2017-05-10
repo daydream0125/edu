@@ -57,7 +57,7 @@ public class CourseChapter {
     }
 
     @Basic
-    @Column(name = "desc", nullable = true, length = 200)
+    @Column(name = "description", nullable = true, length = 200)
     public String getDesc() {
         return desc;
     }

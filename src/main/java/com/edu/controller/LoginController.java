@@ -2,12 +2,14 @@ package com.edu.controller;
 
 
 import com.edu.annotation.SystemControllerLog;
+import com.edu.model.Account;
 import com.edu.model.UserInfo;
 import com.edu.service.AccountMsgService;
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
 import org.springframework.stereotype.Controller;
 
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -44,29 +46,30 @@ public class LoginController {
         this.accountMsgService = accountMsgService;
     }
 
+    @SystemControllerLog("进入登陆界面")
     @RequestMapping("/sign")
     public String login() {
         return "user/sign";
     }
 
 
-    @SystemControllerLog(description = "登录失败")
     //没有通过spring security，提示错误信息
+    @SystemControllerLog("登陆错误")
     @RequestMapping("/loginError")
     public String handleLoginError() {
         return "redirect:sign?error=true";
     }
 
 
-    @SystemControllerLog(description = "注销")
     //注销，向前台传递注销成功信息
+    @SystemControllerLog("注销成功")
     @RequestMapping("/logout")
     public String logout() {
         return "redirect:sign?message=You successfully logout.";
     }
 
 
-    @SystemControllerLog(description = "注册")
+    @SystemControllerLog("注册")
     @RequestMapping("/register")
     @ResponseBody
     public String addUser(String username, String password, String code, HttpSession session) {
@@ -107,14 +110,27 @@ public class LoginController {
         return null;
     }
 
+
     @RequestMapping("/updateInfo")
     public String updateUserInfoPage() {
         return "user/updateUserInfo";
     }
 
+    @RequestMapping("/userInfo")
+    public String userInfoPage() {
+        return "user/userInfo";
+    }
+
+    @RequestMapping("/userInfo/{userId}")
+    @ResponseBody
+    public Account getUserInfo(@PathVariable("userId") String userId) {
+        return accountMsgService.getAccountById(userId);
+    }
+
+    @SystemControllerLog("更新个人信息")
     @RequestMapping("/updateUserInfo")
     @ResponseBody
-    public boolean updateUserInfo(UserInfo userInfo,String name,String cardNumber) {
-        return accountMsgService.updateUserInfo(userInfo, name, cardNumber);
+    public boolean updateUserInfo(UserInfo userInfo,String cardNumber) {
+        return accountMsgService.updateUserInfo(userInfo, cardNumber);
     }
 }

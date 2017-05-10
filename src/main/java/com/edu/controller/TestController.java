@@ -68,7 +68,7 @@ public class TestController {
    }
 
 
-   @SystemControllerLog(description = "测试")
+   @SystemControllerLog("测试")
    @RequestMapping("/testLog/{id}")
    public void testLog(@PathVariable("id") int id) {
         testService.test(id);

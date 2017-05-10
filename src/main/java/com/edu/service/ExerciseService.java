@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -59,8 +60,12 @@ public class ExerciseService {
         problemDAO.delete(problemId);
     }
 
-    public Long getProblemCountByChapterId(int chapterId) {
-        return problemDAO.getProblemCountByChapterId(chapterId);
+    public List getProblemCountByChapterIds(int[] chapterIds) {
+        List<Long> list = new ArrayList();
+        for (int i : chapterIds) {
+            list.add(problemDAO.getProblemCountByChapterId(i));
+        }
+        return list;
     }
 
     public CourseChapter getCourseChapterById(int chapterId) {

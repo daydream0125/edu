@@ -1,9 +1,8 @@
 package com.edu.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -24,6 +23,7 @@ public class Log {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
@@ -44,6 +44,7 @@ public class Log {
 
     @Basic
     @Column(name = "operTime")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
     public Date getOperTime() {
         return operTime;
     }

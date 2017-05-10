@@ -49,7 +49,7 @@ public class CourseService {
     public List getAllCourse() {
         return courseDAO.getAllCourse();
     }
-    @SystemServiceLog(description = "新增班级")
+    @SystemServiceLog("新增班级")
     //为 class 设置外键 teacher 和课程 course
     public void saveClass(Clazz clazz, String teacherId, int courseId) {
         clazz.setTeacher(accountDAO.findByUserId(teacherId));

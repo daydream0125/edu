@@ -20,6 +20,15 @@
 <body>
 <%@include file="../../navigation.jsp" %>
 <div id="app" class="container">
+    <div style="color: #004772;font-weight: bold">
+        <span>当前位置：</span>
+        <a href="">首页</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="teacher/exerciseManage">作业管理</a>
+        <span class=>&nbsp;| &nbsp;</span>
+        <a href="javascript:">添加题目</a>
+        <hr>
+    </div>
     <h1 style="color: black;text-align: center">添加题目</h1>
     <br>
     <h3>{{exercise.exerciseName}}</h3>
@@ -42,7 +51,7 @@
     <i-button size="large" type="primary" @click="viewProblem(sectionId)">查询</i-button>
     <br>
     <br>
-    注意:仅当按下最后提交按钮上述添加按钮方可生效
+    <b style="color: red">注意:仅当按下最后提交按钮上述添加按钮方可生效</b>
     <table class="table">
         <thead>
             <tr>
@@ -52,7 +61,7 @@
         </thead>
         <tbody>
             <tr v-for="(problem,index) in problems">
-                <td v-if="problem.problemPicPath == null || problem.problemPicPath == ''">
+                <td v-if="problem.problemPicPath === 'none'">
                     {{problem.title}}
                 </td>
                 <td v-else>

@@ -52,6 +52,7 @@
                     this.chapterContent = data;
                     this.num = data.courseChapter.num;
                     this.title = data.courseChapter.title;
+                    this.editorContent = data.content;
                 }.bind(this));
             },
             submit: function () {

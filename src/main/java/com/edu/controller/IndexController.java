@@ -1,5 +1,6 @@
 package com.edu.controller;
 
+import com.edu.annotation.SystemControllerLog;
 import com.edu.dao.ProblemDAO;
 import com.edu.model.Course;
 import com.edu.service.CourseService;
@@ -24,8 +25,9 @@ public class IndexController {
     @Resource
     private ExerciseService exerciseService;
 
+    @SystemControllerLog("访问首页")
     @RequestMapping(value = {"/", "/index"})
-    public String getAllCourses(Model model) {
+    public String getAllCourses() {
         return "index";
     }
 

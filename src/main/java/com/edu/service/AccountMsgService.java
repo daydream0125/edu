@@ -100,17 +100,20 @@ public class AccountMsgService {
         accountDAO.update(account);
     }
 
-    public boolean updateUserInfo(UserInfo userInfo,String name,String cardNumber) {
+    public boolean updateUserInfo(UserInfo userInfo,String cardNumber) {
         Account account = accountDAO.findByUserId(userInfo.getUserId());
         UserInfo info = userInfoDAO.findByUserId(userInfo.getUserId());
         if (account != null) {
-            account.setName(name);
+            account.setName(userInfo.getName());
             account.setCardNumber(cardNumber);
+            //更新学号则增加学生角色
+            if (cardNumber != null) {
+                account.getRoles().add(roleDAO.findByRoleName("ROLE_STUDENT"));
+            }
             accountDAO.update(account);
             if (info != null) {
                 info.setDesc(userInfo.getDesc());
                 info.setEmail(userInfo.getEmail());
-                info.setName(name);
                 info.setNickName(userInfo.getNickName());
                 info.setPhone(userInfo.getPhone());
                 info.setTelephone(userInfo.getTelephone());

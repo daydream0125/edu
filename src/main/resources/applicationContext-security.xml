@@ -28,15 +28,22 @@
         </property>
     </bean>
 
-    <s:global-method-security pre-post-annotations="enabled"/>
-
+    <!--<s:global-method-security pre-post-annotations="enabled"/>-->
+    <s:global-method-security secured-annotations="enabled"/>
     <s:http use-expressions="true">
         <!--对根路径下的资源不设置拦截（公共资源），只有对需要拦截的资源进行相应的拦截-->
         <s:intercept-url pattern="/no-public/*" access="hasRole('ROLE_USER')"/>
         <s:intercept-url pattern="/userInfo" access="hasRole('ROLE_USER')"/>
         <s:intercept-url pattern="/teacher/**" access="hasRole('ROLE_TEACHER')"/>
         <s:intercept-url pattern="/student/**" access="hasRole('ROLE_STUDENT')" />
+        <s:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
 
+        <!-- 会话管理 -->
+        <!--限制登录用户只能存在一个-->
+        <s:session-management invalid-session-url="/sign">
+            <!-- 并行控制 -->
+            <s:concurrency-control max-sessions="1" error-if-maximum-exceeded="true"/>
+        </s:session-management>
 
         <!-- loging-processing-url=" /spring_security_check" 仅仅是个名字，但是要和显示层action保持一致，是security进行认证的记号而已 -->
         <!-- login-page 自定义的登录处理action,该action不进行任何的认证处理，spring security会在该action前执行-->
@@ -44,7 +51,7 @@
         <!-- login-processing-ur不用改动，但是jsp页面的action必须与此相同 -->
         <!-- authentication-failure-urljsp页面输入框名字必须与此相同 -->
         <!-- jsp页面输入框名字必须与此相同 -->
-        <s:form-login login-page="/login"
+        <s:form-login login-page="/sign"
                       default-target-url="/index"
                       login-processing-url="/j_security_check"
                       authentication-failure-url="/loginError"
@@ -77,16 +84,4 @@
             <s:password-encoder ref="passwordEncoder"/>
         </s:authentication-provider>
     </s:authentication-manager>
-
-
-    <bean id="roleHierarchy"
-          class="org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl">
-        <property name="hierarchy"><!-- 角色继承关系 -->
-            <value>
-                ROLE_ADMIN > ROLE_USER
-                ROLE_ADMIN > ROLE_TEACHER
-                ROLW_TEACHER > ROLE_STUDENT
-            </value>
-        </property>
-    </bean>
 </beans>

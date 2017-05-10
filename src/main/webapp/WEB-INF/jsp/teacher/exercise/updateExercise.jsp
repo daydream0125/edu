@@ -8,12 +8,6 @@
 <%@include file="../../navigation.jsp"%>
 
 <div class="container">
-    <div class="btn-group btn-group-lg">
-        <a href="${pageContext.request.contextPath}/teacher/exercise/addExercise?teacherId=${sessionScope.account.userId}" class="btn btn-default">新增作业</a>
-        <a href="${pageContext.request.contextPath}/teacher/exercise/releaseList?teacherId=${sessionScope.account.userId}" class="btn btn-default">发布作业</a>
-        <a href="${pageContext.request.contextPath}/teacher/exercise/viewExercise?teacherId=${sessionScope.account.userId}" class="btn btn-default">查看作业</a>
-        <a href="" class="btn btn-default">批改作业</a>
-    </div>
     <hr>
     <h3>更新作业</h3>
     <form action="${pageContext.request.contextPath}/teacher/exercise/updateExercise" method="post"

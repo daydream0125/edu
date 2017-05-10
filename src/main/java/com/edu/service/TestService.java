@@ -16,7 +16,7 @@ public class TestService {
     @Resource
     private CourseDAO courseDAO;
 
-    @SystemServiceLog(description = "fuck")
+    @SystemServiceLog("fuck")
     public void test(int id) {
         System.out.println("this is service test" + id);
     }

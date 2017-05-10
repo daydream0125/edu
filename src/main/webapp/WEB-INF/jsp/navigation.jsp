@@ -19,10 +19,10 @@
             <ul class="nav navbar-nav">
                 <sec:authorize access="hasRole('ROLE_TEACHER')">
                     <li id="teacher-course" :class="{active:isActive}">
-                        <a href="${pageContext.request.contextPath}/teacher/course/courseList?teacherId=${sessionScope.account.userId}">课程管理</a>
+                        <a href="${pageContext.request.contextPath}/teacher/courseList">课程管理</a>
                     </li>
-                    <li id="teacher-problem" :class="{active:isActive}"><a href="${pageContext.request.contextPath}/teacher/exercise/problemManage">题库管理</a></li>
-                    <li id="teacher-exercise" :class="{active:isActive}"><a href="${pageContext.request.contextPath}/teacher/exercise/exerciseManage">作业管理</a></li>
+                    <li id="teacher-problem" :class="{active:isActive}"><a href="${pageContext.request.contextPath}/teacher/problemManage">题库管理</a></li>
+                    <li id="teacher-exercise" :class="{active:isActive}"><a href="${pageContext.request.contextPath}/teacher/exerciseManage">作业管理</a></li>
                     <li id="teacher-score" :class="{active:isActive}"><a href="${pageContext.request.contextPath}/teacher/score/scoreManage">成绩管理</a></li>
                 </sec:authorize>
                 <sec:authorize access="hasRole('ROLE_STUDENT')">
@@ -43,6 +43,11 @@
                 <li id="notice" :class="{active:isActive}">
                     <a href="${pageContext.request.contextPath}/notice">通知公告</a>
                 </li>
+                <sec:authorize access="hasRole('ROLE_ADMIN')">
+                    <li id="notice" :class="{active:isActive}">
+                        <a href="${pageContext.request.contextPath}/admin">管理员</a>
+                    </li>
+                </sec:authorize>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <sec:authorize access="hasRole('ROLE_USER')">

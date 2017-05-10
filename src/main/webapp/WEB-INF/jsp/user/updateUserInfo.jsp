@@ -4,17 +4,6 @@
 <html>
 <head>
     <title>个人信息</title>
-    <style>
-        hr {
-            display: block;
-            -webkit-margin-before: 0.5em;
-            -webkit-margin-after: 0.5em;
-            -webkit-margin-start: auto;
-            -webkit-margin-end: auto;
-            border-style: inset;
-            border-width: 1px;
-        }
-    </style>
 </head>
 <body>
 <%@include file="../navigation.jsp" %>
@@ -91,22 +80,6 @@
         },
         mounted: function () {
             this.getUserInfo(this.userId);
-        },
-        filters: {
-            formatRoles: function (roles) {
-                let roleName = "普通用户";
-                for (let r in roles) {
-                    roleName += " ";
-                    if (roles[r].roleName === "ROLE_ADMIN") {
-                        roleName += "管理员";
-                    } else if (roles[r].roleName === "ROLE_STUDENT") {
-                        roleName += "学生";
-                    } else if (roles[r].roleName === "ROLE_TEACHER") {
-                        roleName += "教师";
-                    }
-                }
-                return roleName;
-            }
         }
     });
     new Vue({

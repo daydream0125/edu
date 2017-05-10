@@ -100,8 +100,8 @@ public class UserInfo {
         return telephone;
     }
 
-    public void setTelephone(String telephoe) {
-        this.telephone = telephoe;
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 
     @Basic
@@ -137,7 +137,7 @@ public class UserInfo {
     }
 
     @Basic
-    @Column(name = "desc")
+    @Column(name = "description")
     public String getDesc() {
         return desc;
     }

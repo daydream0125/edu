@@ -94,7 +94,7 @@
         },
         methods: {
             register: function () {
-                window.location.href = "register";
+                window.location.href = "sign";
             },
             courseInfo: function (courseId) {
                 window.location.href = "course/" + courseId;

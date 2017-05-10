@@ -53,7 +53,7 @@ public class Organization {
     }
 
     @Basic
-    @Column(name = "desc")
+    @Column(name = "description")
     public String getDesc() {
         return desc;
     }

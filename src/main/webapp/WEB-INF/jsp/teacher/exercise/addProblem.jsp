@@ -11,7 +11,7 @@
         <span>当前位置：</span>
         <a href="">首页</a>
         <span class=>&nbsp;| &nbsp;</span>
-        <a href="teacher/exercise/problemManage">题库管理</a>
+        <a href="teacher/problemManage">题库管理</a>
         <span class=>&nbsp;| &nbsp;</span>
         <a href="javascript:">新增</a>
         <hr>

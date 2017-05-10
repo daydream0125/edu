@@ -68,7 +68,6 @@ public class SimpleLoginSuccessHandler implements AuthenticationSuccessHandler, 
         }
     }
 
-    @SystemControllerLog(description = "登录")
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
     public void saveLoginInfo(HttpServletRequest request, Authentication authentication) {
         Account account;

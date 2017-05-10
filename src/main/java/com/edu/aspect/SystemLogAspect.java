@@ -42,12 +42,13 @@ public class SystemLogAspect {
     public void controllerAspect() {
     }
 
-    /**
-     * 前置通知 用于拦截Controller层记录用户的操作
-     *
-     * @param joinPoint 切点
-     */
 
+    /**
+     * 获取参数,序列化未 json 字符串
+     *
+     * @param joinPoint
+     * @return
+     */
     private String getParams(JoinPoint joinPoint) {
         StringBuilder params = new StringBuilder();
         if (joinPoint.getArgs() != null && joinPoint.getArgs().length > 0) {
@@ -58,6 +59,11 @@ public class SystemLogAspect {
         return params.toString();
     }
 
+    /**
+     * 前置通知 用于拦截Controller层记录用户的操作
+     *
+     * @param joinPoint 切点
+     */
     @Before("controllerAspect()")
     public void doBefore(JoinPoint joinPoint) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
@@ -65,6 +71,12 @@ public class SystemLogAspect {
         //读取session中的用户
         Account account = (Account) session.getAttribute("account");
         //请求的IP
+        String userName = "未登陆";
+        String userId = "未登陆";
+        if (account != null) {
+            userName = account.getName();
+            userId = account.getUserId();
+        }
         String ip = HttpUtils.getRealIP(request);
         try {
 
@@ -72,7 +84,7 @@ public class SystemLogAspect {
             System.out.println("=====前置通知开始=====");
             System.out.println("请求方法:" + (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()"));
             System.out.println("方法描述:" + getControllerMethodDescription(joinPoint));
-            System.out.println("请求人:" + account.getName());
+            System.out.println("请求人:" + userName);
             System.out.println("请求IP:" + ip);
             System.out.println("请求时间:" + new Date());
             //*========数据库日志=========*//
@@ -81,7 +93,7 @@ public class SystemLogAspect {
             log.setType((byte) 0);
             log.setParams(getParams(joinPoint));
             log.setMethod(joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()");
-            log.setUserId(account.getUserId());
+            log.setUserId(userId);
             log.setIp(ip);
             log.setOperTime(new Date());
             log.setOperation(getControllerMethodDescription(joinPoint));
@@ -110,6 +122,13 @@ public class SystemLogAspect {
         HttpSession session = request.getSession();
         //读取session中的用户
         Account account = (Account) session.getAttribute("account");
+
+        String userName = "未登陆";
+        String userId = "未登陆";
+        if (account != null) {
+            userName = account.getName();
+            userId = account.getUserId();
+        }
         //获取请求ip
         String ip = request.getRemoteAddr();
         //获取用户请求方法的参数并序列化为JSON格式字符串
@@ -122,12 +141,12 @@ public class SystemLogAspect {
             System.out.println("异常信息:" + e.getMessage());
             System.out.println("异常方法:" + (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()"));
             System.out.println("方法描述:" + getServiceMethodDescription(joinPoint));
-            System.out.println("请求人:" + account.getName());
+            System.out.println("请求人:" + userName);
             System.out.println("请求IP:" + ip);
             System.out.println("请求参数:" + params);
                /*==========数据库日志=========*/
             Log log = new Log();
-            log.setUserId(account.getUserId());
+            log.setUserId(userId);
             log.setIp(ip);
             log.setOperTime(new Date());
             log.setOperTime(new Date());
@@ -168,7 +187,7 @@ public class SystemLogAspect {
             if (method.getName().equals(methodName)) {
                 Class[] clazzs = method.getParameterTypes();
                 if (clazzs.length == arguments.length) {
-                    description = method.getAnnotation(SystemServiceLog.class).description();
+                    description = method.getAnnotation(SystemServiceLog.class).value();
                     break;
                 }
             }
@@ -194,7 +213,7 @@ public class SystemLogAspect {
             if (method.getName().equals(methodName)) {
                 Class[] clazzs = method.getParameterTypes();
                 if (clazzs.length == arguments.length) {
-                    description = method.getAnnotation(SystemControllerLog.class).description();
+                    description = method.getAnnotation(SystemControllerLog.class).value();
                     break;
                 }
             }

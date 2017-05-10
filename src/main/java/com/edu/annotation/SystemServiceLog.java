@@ -10,8 +10,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public  @interface SystemServiceLog {
-
-    String description()  default "";
-
-
+    String value()  default "";
 }

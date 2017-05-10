@@ -52,9 +52,6 @@ public class AppTest {
             Workbook wb = new XSSFWorkbook(in);
             Sheet sheet = wb.getSheetAt(0);
             for (Row row : sheet) {
-//                if (row.getRowNum() < 1) {
-//                    continue;
-//                }
                 result.add(row.getCell(0).getStringCellValue());
             }
         } catch (Exception e) {
