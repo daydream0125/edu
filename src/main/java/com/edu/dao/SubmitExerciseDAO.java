@@ -1,5 +1,6 @@
 package com.edu.dao;
 
+import com.edu.model.Course;
 import com.edu.model.SubmitExercise;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -87,23 +88,23 @@ public class SubmitExerciseDAO {
         String hql = "select classmate from SubmitExercise e where e.exercise.exerciseId=? " +
                 "and e.judgeSubjective=?";
         Query query = getSession().createQuery(hql);
-        query.setInteger(0,exerciseId);
-        query.setBoolean(1,false);
+        query.setInteger(0, exerciseId);
+        query.setBoolean(1, false);
         return query.list();
     }
 
-    public SubmitExercise getByExerciseAndClassmate(int exerciseId,int classmateId) {
+    public SubmitExercise getByExerciseAndClassmate(int exerciseId, int classmateId) {
         String hql = "from SubmitExercise where exercise.exerciseId=? and classmate.classmateId=?";
         Query query = getSession().createQuery(hql);
-        query.setInteger(0,exerciseId);
-        query.setInteger(1,classmateId);
+        query.setInteger(0, exerciseId);
+        query.setInteger(1, classmateId);
         return (SubmitExercise) query.uniqueResult();
     }
 
     public List getExerciseScores(int exerciseId) {
         String hql = "select s.classmate.account.name,s.score from SubmitExercise s where s.exercise.exerciseId=? order by s.score";
         Query query = getSession().createQuery(hql);
-        query.setInteger(0,exerciseId);
+        query.setInteger(0, exerciseId);
         return query.list();
 
     }
@@ -111,27 +112,29 @@ public class SubmitExerciseDAO {
 
     /**
      * 与上面的方法相比，该方法只返回classmateId，name 字段(前段获取数据慢，卡！！！！！)
+     *
      * @param exerciseId
      * @return list
      */
     public List getClassmates(int exerciseId) {
         String hql = "select s.classmate.classmateId, s.classmate.account.name from SubmitExercise s where s.exercise.exerciseId=?";
-        return getSession().createQuery(hql).setInteger(0,exerciseId).list();
+        return getSession().createQuery(hql).setInteger(0, exerciseId).list();
     }
 
 
     /**
      * 根据用户名和练习名获得某一用户在某一练习下的成绩
+     *
      * @param exerciseId
      * @param userId
      * @return
      */
     public Double getExerciseScoreByUser(int exerciseId, String userId) {
-         return (Double) getSession()
-                 .createQuery("select s.score from SubmitExercise s where s.exercise.exerciseId=?" +
-                         "and s.classmate.account.userId=?")
-                 .setInteger(0,exerciseId)
-                 .setString(1,userId).uniqueResult();
+        return (Double) getSession()
+                .createQuery("select s.score from SubmitExercise s where s.exercise.exerciseId=?" +
+                        "and s.classmate.account.userId=?")
+                .setInteger(0, exerciseId)
+                .setString(1, userId).uniqueResult();
 
     }
 
@@ -139,6 +142,7 @@ public class SubmitExerciseDAO {
     /**
      * 根据已提交的记录，从 exerciseID和 userID 中筛选出 classmateId。该 id 唯一，即每个 classmate 只
      * 允许提交一次。
+     *
      * @param exerciseId
      * @param userId
      * @return
@@ -147,15 +151,35 @@ public class SubmitExerciseDAO {
         return (int) getSession()
                 .createQuery("select s.classmate.classmateId from SubmitExercise s " +
                         "where s.exercise.exerciseId=? and s.classmate.account.userId=?")
-                .setInteger(0,exerciseId)
-                .setString(1,userId).uniqueResult();
+                .setInteger(0, exerciseId)
+                .setString(1, userId).uniqueResult();
     }
 
     public SubmitExercise getByExerciseAndUser(int exerciseId, String userId) {
         return (SubmitExercise) getSession().
                 createQuery("from SubmitExercise where exercise.exerciseId=? and classmate.account.userId=?")
-                .setInteger(0,exerciseId)
-                .setString(1,userId)
+                .setInteger(0, exerciseId)
+                .setString(1, userId)
                 .uniqueResult();
     }
+
+    /**
+     * 判断是否存在未统计分数的作业
+     *
+     * @param classId
+     * @return
+     */
+
+    public boolean existsUnMarkExercise(int classId) {
+        return getSession()
+                .createQuery("select s.id from SubmitExercise s " +
+                        "where s.exercise.clazz.id=? and s.countScore=false")
+                .setInteger(0, classId)
+                .list() == null;
+    }
+
+
+
+
+
 }

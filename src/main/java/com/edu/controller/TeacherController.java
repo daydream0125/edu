@@ -329,7 +329,40 @@ public class TeacherController {
     }
 
 
+    @RequestMapping("/existsUnMarkExercise/{classId}")
+    @ResponseBody
+    public boolean existsUnMarkExercise(@PathVariable("classId") int classId) {
+        return exerciseService.existsUnMarkExercise(classId);
+    }
+
+    @RequestMapping("/existFinalExercise/{classId}")
+    @ResponseBody
+    public boolean existFinalExercise(@PathVariable("classId") int classId) {
+        return exerciseService.existFinalExercise(classId);
+
+    }
 
 
+    @SystemControllerLog("班级结课，计算成绩")
+    @RequestMapping("/finishClass/{classId}")
+    @ResponseBody
+    public boolean finishClass(@PathVariable("classId") int classId) {
+        return clazzService.finishClass(classId);
+    }
+
+
+
+    @RequestMapping("courses/sharp/{teacherId}")
+    @ResponseBody
+    public List getSharpCourseByTeacherId(@PathVariable("teacherId") String teacherId) {
+        return courseService.getSharpCourseByTeacherId(teacherId);
+    }
+
+
+    @RequestMapping("classes/sharp/{courseId}")
+    @ResponseBody
+    public List getSharpClassesByCourseId(@PathVariable("courseId") int courseId) {
+        return clazzService.getSharpClassesByCourseId(courseId);
+    }
 
 }

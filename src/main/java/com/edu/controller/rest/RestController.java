@@ -50,8 +50,6 @@ public class RestController {
     }
 
 
-
-
     @SystemControllerLog("查看练习下的题目")
     @RequestMapping("/exercise/{exerciseId}/problems")
     public List getProblemsByExerciseId(@PathVariable("exerciseId") int exerciseId) {
@@ -64,7 +62,7 @@ public class RestController {
         return exerciseService.getProblemBySectionId(sectionId);
     }
 
-    @RequestMapping(value = "/problem/{problemId}",method = RequestMethod.GET)
+    @RequestMapping(value = "/problem/{problemId}", method = RequestMethod.GET)
     public Problem getProblemById(@PathVariable("problemId") int problemId) {
         return exerciseService.getProblemById(problemId);
     }
@@ -74,8 +72,9 @@ public class RestController {
      */
 
 
+
     @RequestMapping("userToClassmate")
-    public int userToClassmate(int exerciseId,String userId) {
-        return exerciseService.getClassmateIdByExerciseAndUser(exerciseId,userId);
+    public int userToClassmate(int exerciseId, String userId) {
+        return exerciseService.getClassmateIdByExerciseAndUser(exerciseId, userId);
     }
 }

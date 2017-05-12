@@ -175,7 +175,7 @@
                 this.submitAnswers[this.globalIndex].endTime = new Date().Format("yyyy-MM-dd HH:mm:ss");
                 //当前用户的答案
                 let data = {
-                    'userId':${sessionScope.account.userId},
+                    'userId':<sec:authentication property="principal.username" />,
                     'exerciseId': this.exerciseId,
                     'answers': this.submitAnswers,
                     'problemsId': this.problemsId,

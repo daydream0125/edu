@@ -26,7 +26,7 @@ public class Clazz {
     private Date examTime;
     private Boolean isPublicRegister = false;
     private Boolean isFinish = false;
-    private Integer scorePercent;
+    private Integer scorePercent = 3;
     private Course course;
     private Account teacher;
     private Set<Classmate> classmates = new HashSet<>();

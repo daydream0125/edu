@@ -1,12 +1,10 @@
 package com.edu.controller;
 
 import com.edu.annotation.SystemControllerLog;
-import com.edu.dao.SubmitExerciseDAO;
 import com.edu.service.ExerciseService;
 import com.edu.service.ScoreService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,7 +27,7 @@ public class ScoreController {
     }
 
 
-    @Secured({"ROLE_TEACHER","ROLE_ADMIN"})
+    @Secured({"ROLE_TEACHER", "ROLE_ADMIN"})
     @SystemControllerLog("查看学生成绩")
     @RequestMapping("/classmateScore")
 
@@ -50,7 +48,7 @@ public class ScoreController {
         return "student/scoreManage";
     }
 
-    @Secured({"ROLE_TEACHER","ROLE_ADMIN","ROLE_STUDENT"})
+    @Secured({"ROLE_TEACHER", "ROLE_ADMIN", "ROLE_STUDENT"})
     @SystemControllerLog("查看题目得分情况")
     @RequestMapping("/problemScores/{problemId}")
     @ResponseBody
@@ -58,7 +56,12 @@ public class ScoreController {
         return scoreService.getProblemScores(problemId);
     }
 
-    @Secured({"ROLE_TEACHER","ROLE_ADMIN","ROLE_STUDENT"})
+    @RequestMapping("teacher/viewClassScore")
+    public String classScore() {
+        return "teacher/score/classScore";
+    }
+
+    @Secured({"ROLE_TEACHER", "ROLE_ADMIN", "ROLE_STUDENT"})
     @SystemControllerLog("查看练习成绩")
     @RequestMapping("/exerciseScores/{exerciseId}")
     @ResponseBody
@@ -66,15 +69,15 @@ public class ScoreController {
         return scoreService.getExerciseScores(exerciseId);
     }
 
-    @Secured({"ROLE_TEACHER","ROLE_ADMIN","ROLE_STUDENT"})
+    @Secured({"ROLE_TEACHER", "ROLE_ADMIN", "ROLE_STUDENT"})
     @SystemControllerLog("查看练习是否批改完成")
     @RequestMapping("exercise/{exerciseId}/isJudge")
     @ResponseBody
     public boolean isExerciseFinishJudge(@PathVariable("exerciseId") int exerciseId) {
-        return exerciseService.isExercciseFinishJudge(exerciseId);
+        return exerciseService.isExerciseFinishJudge(exerciseId);
     }
 
-    @Secured({"ROLE_TEACHER","ROLE_ADMIN","ROLE_STUDENT"})
+    @Secured({"ROLE_TEACHER", "ROLE_ADMIN", "ROLE_STUDENT"})
     @SystemControllerLog("获取提交练习的学生")
     @RequestMapping("/classmates/{exerciseId}")
     @ResponseBody
@@ -82,23 +85,23 @@ public class ScoreController {
         return exerciseService.getClassmates(exerciseId);
     }
 
-    @Secured({"ROLE_TEACHER","ROLE_ADMIN","ROLE_STUDENT"})
+    @Secured({"ROLE_TEACHER", "ROLE_ADMIN", "ROLE_STUDENT"})
     @SystemControllerLog("获取所有学生的练习成绩")
     @RequestMapping("/classmate/score")
     @ResponseBody
-    public List getClassmateScore(int exerciseId,int classmateId) {
-        return scoreService.getClassmateScore(exerciseId,classmateId);
+    public List getClassmateScore(int exerciseId, int classmateId) {
+        return scoreService.getClassmateScore(exerciseId, classmateId);
     }
 
-    @Secured({"ROLE_TEACHER","ROLE_ADMIN","ROLE_STUDENT"})
+    @Secured({"ROLE_TEACHER", "ROLE_ADMIN", "ROLE_STUDENT"})
     @SystemControllerLog("获取练习的平均成绩")
     @RequestMapping("/classmate/average")
     @ResponseBody
-    public List getAverageInExercise(int exerciseId,@RequestParam("problemIds[]") int[] problemIds) {
-        return scoreService.getAverageInExercise(exerciseId,problemIds);
+    public List getAverageInExercise(int exerciseId, @RequestParam("problemIds[]") int[] problemIds) {
+        return scoreService.getAverageInExercise(exerciseId, problemIds);
     }
 
-    @Secured({"ROLE_TEACHER","ROLE_ADMIN","ROLE_STUDENT"})
+    @Secured({"ROLE_TEACHER", "ROLE_ADMIN", "ROLE_STUDENT"})
     @SystemControllerLog("获取题目得分统计情况")
     @RequestMapping("/problem/score")
     @ResponseBody
@@ -106,7 +109,7 @@ public class ScoreController {
         return scoreService.getProblemScoreCount(problemId);
     }
 
-    @Secured({"ROLE_TEACHER","ROLE_ADMIN","ROLE_STUDENT"})
+    @Secured({"ROLE_TEACHER", "ROLE_ADMIN", "ROLE_STUDENT"})
     @SystemControllerLog("获取题目在练习中的平均成绩")
     @RequestMapping("problem/averageInExercise/{problemId}")
     @ResponseBody
@@ -114,7 +117,7 @@ public class ScoreController {
         return scoreService.getAverageProblemScoreInExercise(problemId);
     }
 
-    @Secured({"ROLE_TEACHER","ROLE_ADMIN","ROLE_STUDENT"})
+    @Secured({"ROLE_TEACHER", "ROLE_ADMIN", "ROLE_STUDENT"})
     @SystemControllerLog("获取题目的总平均成绩")
     @RequestMapping("problemAverage/{problemId}")
     @ResponseBody
@@ -122,7 +125,7 @@ public class ScoreController {
         return scoreService.getProblemAverage(problemId);
     }
 
-    @Secured({"ROLE_TEACHER","ROLE_ADMIN","ROLE_STUDENT"})
+    @Secured({"ROLE_TEACHER", "ROLE_ADMIN", "ROLE_STUDENT"})
     @SystemControllerLog("获取题目的所有成绩")
     @RequestMapping("/allProblemScore/{problemId}")
     @ResponseBody
@@ -133,13 +136,19 @@ public class ScoreController {
     /**
      * 学生成绩模块
      */
-    @Secured({"ROLE_TEACHER","ROLE_ADMIN","ROLE_STUDENT"})
+    @Secured({"ROLE_TEACHER", "ROLE_ADMIN", "ROLE_STUDENT"})
     @SystemControllerLog("学生查看练习成绩")
     @RequestMapping("/student/score/exercise")
     @ResponseBody
-    public Double getExerciseScore(int exerciseId,String userId) {
-        return scoreService.getExerciseScoreByUser(exerciseId,userId);
+    public Double getExerciseScore(int exerciseId, String userId) {
+        return scoreService.getExerciseScoreByUser(exerciseId, userId);
     }
 
+
+    @RequestMapping("class/score/{classId}")
+    @ResponseBody
+    public List getClassScores(@PathVariable("classId") int classId) {
+        return scoreService.getClassScores(classId);
+    }
 
 }

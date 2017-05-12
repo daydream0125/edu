@@ -1,5 +1,6 @@
 package com.edu.service;
 
+import com.edu.annotation.SystemServiceLog;
 import com.edu.dao.*;
 import com.edu.model.*;
 import com.edu.utils.JudgeUtil;
@@ -39,6 +40,7 @@ public class ExerciseService {
     private SubmitExerciseDAO submitExerciseDAO;
 
 
+    @SystemServiceLog("获取小节下的题目")
     public List getProblemBySectionId(int sectionId) {
         return problemDAO.getProblemBySectionId(sectionId);
     }
@@ -51,6 +53,7 @@ public class ExerciseService {
         problemDAO.update(problem);
     }
 
+    @SystemServiceLog("搜索小节下的题目")
     //以小节名搜索数据库，并取出对应的题目。
     public List searchChapterByChapterTitle(String chapterTitle) {
         return courseChapterDAO.searchByChapterTitle(chapterTitle);
@@ -60,6 +63,7 @@ public class ExerciseService {
         problemDAO.delete(problemId);
     }
 
+    @SystemServiceLog("获取章节下题目数量")
     public List getProblemCountByChapterIds(int[] chapterIds) {
         List<Long> list = new ArrayList();
         for (int i : chapterIds) {
@@ -72,6 +76,7 @@ public class ExerciseService {
         return courseChapterDAO.getChapterById(chapterId);
     }
 
+    @SystemServiceLog("增设作业")
     public boolean saveExercise(Exercise exercise, int courseId, int classId, String teacherId) {
         try {
             exercise.setCourse(courseDAO.getCourseById(courseId));
@@ -84,6 +89,7 @@ public class ExerciseService {
         }
         return true;
     }
+
 
     public Exercise getExerciseById(int exerciseId) {
         return exerciseDAO.getById(exerciseId);
@@ -101,6 +107,8 @@ public class ExerciseService {
         exerciseDAO.delete(exerciseId);
     }
 
+
+    @SystemServiceLog("发布作业")
     public boolean releaseExercise(int exerciseId) {
         try {
             exerciseDAO.updateIsRelease(exerciseId);
@@ -124,6 +132,7 @@ public class ExerciseService {
     }
 
 
+    @SystemServiceLog("保存用户提交的答案")
     //批量保存用户提交的答案, Answer 为方便 springmvc 封装数据的辅助类
     //submitAnswers属于同一exercise
     public boolean batchSaveAnswers(Answer answer, String ip) {
@@ -157,6 +166,7 @@ public class ExerciseService {
         return true;
     }
 
+    @SystemServiceLog("新增题目")
     public boolean saveProblem(Problem problem, String createUserId, int sectionId, int courseId) {
         try {
             problem.setCreateTime(new Date());
@@ -172,6 +182,7 @@ public class ExerciseService {
         return true;
     }
 
+    @SystemServiceLog("上传题目图片")
     public String uploadPicture(MultipartFile multipartFile) {
         //相对路径,数据库存储该字段
         String relativePath = "problem-img/" + System.currentTimeMillis() + multipartFile.getOriginalFilename();
@@ -188,6 +199,7 @@ public class ExerciseService {
         return relativePath;
     }
 
+    @SystemServiceLog("增加题目至作业")
     public boolean addProblemsToExercise(int[] problemsId, int exerciseId) {
         if (problemsId.length == 0) {
             return false;
@@ -214,6 +226,7 @@ public class ExerciseService {
         return true;
     }
 
+    @SystemServiceLog("筛选题目")
     public List filterProblems(int type, int keywords) {
         if (type == 1) {
             return problemDAO.getProblemsByCourseId(keywords);
@@ -238,6 +251,8 @@ public class ExerciseService {
         return submitExerciseDAO.getJudgeCount(exerciseId);
     }
 
+
+    @SystemServiceLog("批改客观题")
     public boolean markObjectiveProblem(int exerciseId) {
 
         List<SubmitAnswer> answers = submitAnswerDAO.getObjectiveAnswer(exerciseId);
@@ -306,6 +321,7 @@ public class ExerciseService {
         return submitExerciseDAO.getExistUnMarkProblemClassmates(exerciseId);
     }
 
+    @SystemServiceLog("批改主观题")
     public boolean markSubjectiveProblem(int[] scores, int[] answersId) {
         if (answersId == null) {
             return false;
@@ -331,6 +347,7 @@ public class ExerciseService {
         return true;
     }
 
+    @SystemServiceLog("计算练习成绩")
     //计算每位同学某一练习下的最终得分，计算规则为 总分/problemCount*10（转换为百分制）
     public boolean countScore(int exerciseId) {
         try {
@@ -352,7 +369,7 @@ public class ExerciseService {
         return true;
     }
 
-    public boolean isExercciseFinishJudge(int exerciseId) {
+    public boolean isExerciseFinishJudge(int exerciseId) {
         return exerciseDAO.getJudge(exerciseId);
     }
 
@@ -375,5 +392,13 @@ public class ExerciseService {
 
     public List getSharpExercise(int exerciseId) {
         return exerciseDAO.getSharpExercise(exerciseId);
+    }
+
+    public boolean existFinalExercise(int classId) {
+        return exerciseDAO.existFinalExercise(classId);
+    }
+
+    public boolean existsUnMarkExercise(int classId) {
+        return submitExerciseDAO.existsUnMarkExercise(classId);
     }
 }

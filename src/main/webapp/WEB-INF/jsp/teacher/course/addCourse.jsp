@@ -28,8 +28,8 @@
         <form action="${pageContext.request.contextPath}/teacher/saveCourse" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="teacher">开课老师</label>
-                <input type="text" class="form-control" id="teacher" value="${sessionScope.account.name}" readonly>
-                <input type="hidden" name="teacherId" value="${sessionScope.account.userId}">
+                <input type="text" class="form-control" id="teacher" value="${<sec:authentication property="principal.username" />.account.name}" readonly>
+                <input type="hidden" name="teacherId" value="<sec:authentication property="principal.username" />">
             </div>
             <div class="form-group">
                 <label for="courseName">课程名称</label>

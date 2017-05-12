@@ -88,6 +88,9 @@
                     <c:if test="${not empty param.message}">
                         <p style="color: green">注销成功</p>
                     </c:if>
+                    <c:if test="${not empty param.isLogin}">
+                        <p style="color: red">已在其他设备登录</p>
+                    </c:if>
                     <i-button type="primary" html-type="submit" long size="large" style="height: 46px">登录</i-button>
                 </form>
             </div>

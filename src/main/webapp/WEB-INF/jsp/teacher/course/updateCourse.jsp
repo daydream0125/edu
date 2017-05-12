@@ -13,8 +13,8 @@
     <form action="${pageContext.request.contextPath}/teacher/course/updateCourse" method="post">
         <div class="form-group">
             <label for="teacher">开课老师</label>
-            <input type="text" class="form-control" id="teacher" value="${sessionScope.account.name}" readonly>
-            <input type="hidden" name="teacherId" value="${sessionScope.account.userId}">
+            <input type="text" class="form-control" id="teacher" value="${<sec:authentication property="principal.username" />.account.name}" readonly>
+            <input type="hidden" name="teacherId" value="<sec:authentication property="principal.username" />">
             <input type="hidden" name="courseId" value="${course.courseId}">
         </div>
         <div class="form-group">

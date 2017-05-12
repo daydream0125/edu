@@ -1,10 +1,11 @@
 <%@ page pageEncoding="UTF-8" language="java" %>
-<%@ include file="../../static.jsp" %>
+
 <html>
 <head>
     <title>
         成绩管理
     </title>
+    <%@ include file="../../static.jsp" %>
 </head>
 <body>
 <%@include file="../../navigation.jsp" %>
@@ -18,7 +19,8 @@
     </div>
     <div style="float: right;margin-right: 100px">
         <i-button type="primary" size="large" @click="problemScore">题目分析</i-button>
-        <i-button type="primary" size="large" @click="viewClassmateScore(index)">查看学生成绩</i-button>
+        <i-button type="primary" size="large" @click="viewClassmateScore(index)">学生成绩</i-button>
+        <i-button type="primary" size="large" @click="viewClassScore">班级成绩</i-button>
     </div>
     <div id="exerciseScore" style="width: 100%;height: 500px;margin-top: 40px" v-if="showExerciseScores">
     </div>
@@ -57,7 +59,7 @@
     new Vue({
         el: '#container',
         data: {
-            teacherId:${sessionScope.account.userId},
+            teacherId:<sec:authentication property="principal.username" />,
             exercises: [],
             exerciseIndex: 0,
             currentExercises: [],
@@ -67,6 +69,9 @@
             showExerciseScores: false
         },
         methods: {
+            viewClassScore: function () {
+                window.location.href = "teacher/viewClassScore";
+            },
             problemScore: function () {
                 window.location.href = "problemScore";
             },

@@ -1,5 +1,6 @@
 package com.edu.service;
 
+import com.edu.annotation.SystemServiceLog;
 import com.edu.dao.AccountDAO;
 import com.edu.dao.ClassmateDAO;
 import com.edu.dao.ClazzDAO;
@@ -55,6 +56,7 @@ public class ClazzService {
         return classmateDAO.getClassmates(classId);
     }
 
+    @SystemServiceLog("注册班级")
     public boolean register(String userId, int classId, int courseId) {
         if (classmateDAO.isRegister(classId, userId)) {
             return false;
@@ -72,10 +74,12 @@ public class ClazzService {
         return true;
     }
 
+    @SystemServiceLog("开放班级注册")
     public void openRegister(int classId) {
         clazzDAO.updateIsPublicRegister(classId, true);
     }
 
+    @SystemServiceLog("增设班级")
     public boolean addClass(Clazz clazz, String teacherId, int courseId) {
         try {
             clazz.setTeacher(accountDAO.getByUserId(teacherId));
@@ -89,10 +93,12 @@ public class ClazzService {
         return true;
     }
 
+    @SystemServiceLog("获取注册学生")
     public List getRegisters(int classId) {
         return classmateDAO.getRegisters(classId);
     }
 
+    @SystemServiceLog("审核注册通过")
     public boolean approveRegisters(int[] approveRegisters) {
         try {
             classmateDAO.approveRegisters(approveRegisters);
@@ -105,6 +111,7 @@ public class ClazzService {
 
 
     //导入学生
+    @SystemServiceLog("导入学生至班级")
     public List<String> importStudent(MultipartFile file, int classId) {
         List<String> errorList = new ArrayList<>();
         List<String> errorInfo = new ArrayList<>();
@@ -149,6 +156,24 @@ public class ClazzService {
         return errorList;
     }
 
+    @SystemServiceLog("班级结课，计算成绩")
+    public boolean finishClass(int classId) {
+        try {
+            //更新班级结课字段
+            clazzDAO.updateIdFinish(classId,true);
+            //统计分数
+            classmateDAO.countScore(classId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 
 
+
+
+    public List getSharpClassesByCourseId(int courseId) {
+        return clazzDAO.getSharpClassesByCourseId(courseId);
+    }
 }

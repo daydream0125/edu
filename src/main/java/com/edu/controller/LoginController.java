@@ -133,4 +133,10 @@ public class LoginController {
     public boolean updateUserInfo(UserInfo userInfo,String cardNumber) {
         return accountMsgService.updateUserInfo(userInfo, cardNumber);
     }
+
+
+    @RequestMapping("/access_denied")
+    public String accessDenied() {
+        return "access_denied";
+    }
 }

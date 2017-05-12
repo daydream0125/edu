@@ -175,12 +175,12 @@
                     </td>
                     <sec:authorize access="hasRole('ROLE_STUDENT')">
                         <td v-if="clazz.isPublicRegister">
-                            <div v-if="checkIsRegister(${sessionScope.account.userId},clazz.classId)">
+                            <div v-if="checkIsRegister(<sec:authentication property="principal.username" />,clazz.classId)">
                                 <Tag type="border" color="green">已注册
                                 </Tag>
                             </div>
                             <div v-else>
-                                <i-button type="ghost" @click="register(${sessionScope.account.userId},clazz.classId)">注册</i-button>
+                                <i-button type="ghost" @click="register(<sec:authentication property="principal.username" />,clazz.classId)">注册</i-button>
                             </div>
                         </td>
                         <td v-else>

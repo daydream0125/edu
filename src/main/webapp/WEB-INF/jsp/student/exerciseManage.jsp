@@ -44,7 +44,7 @@
     new Vue({
         el: '#app',
         data: {
-            userId:${sessionScope.account.userId},
+            userId:<sec:authentication property="principal.username" />,
             currentExercises: [], //当前页展示的练习
             pageSize: 7,
             showStartExercise: false,

@@ -13,42 +13,57 @@ import javax.annotation.Resource;
 
 @Repository
 public class ClazzDAO {
-	private SessionFactory sessionFactory;
+    private SessionFactory sessionFactory;
 
 
-	public SessionFactory getSessionFactory() {
-		return sessionFactory;
-	}
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
 
-	@Resource
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
+    @Resource
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
-	private Session getSession() {
-		return sessionFactory.getCurrentSession();
-	}
+    private Session getSession() {
+        return sessionFactory.getCurrentSession();
+    }
 
-	public void save(Clazz clazz) {
-		getSession().save(clazz);
-	}
+    public void save(Clazz clazz) {
+        getSession().save(clazz);
+    }
 
-	//获取特定课程下所开设的班级
-	public List getClazzByCourseId(int courseId) {
-		String hql = "from Clazz where course.courseId =:Id";
-		Query query = getSession().createQuery(hql);
-		query.setInteger("Id",courseId);
-		return query.list();
-	}
+    //获取特定课程下所开设的班级
+    public List getClazzByCourseId(int courseId) {
+        String hql = "from Clazz where course.courseId =:Id";
+        Query query = getSession().createQuery(hql);
+        query.setInteger("Id", courseId);
+        return query.list();
+    }
 
-	//更新isPublicRegister字段。开放注册 or 关闭注册
-	public void updateIsPublicRegister(int classId,Boolean isPublicRegister) {
-		Clazz clazz = (Clazz) getSession().get(Clazz.class,classId);
-		clazz.setIsPublicRegister(isPublicRegister);
-		getSession().saveOrUpdate(clazz);
-	}
+    //更新isPublicRegister字段。开放注册 or 关闭注册
+    public void updateIsPublicRegister(int classId, Boolean isPublicRegister) {
+        Clazz clazz = (Clazz) getSession().get(Clazz.class, classId);
+        clazz.setIsPublicRegister(isPublicRegister);
+        getSession().saveOrUpdate(clazz);
+    }
 
-	public Clazz get(int clazzId) {
-		return (Clazz) getSession().get(Clazz.class,clazzId);
-	}
+    public Clazz get(int clazzId) {
+        return (Clazz) getSession().get(Clazz.class, clazzId);
+    }
+
+    public void updateIdFinish(int classId, boolean isFinish) {
+        getSession()
+                .createQuery("update Clazz  c set c.isFinish=? where c.id=?").setBoolean(0, isFinish)
+                .setInteger(1, classId).executeUpdate();
+    }
+
+    public List getSharpClassesByCourseId(int courseId) {
+        return getSession()
+                .createQuery("select c.id,c.className from Clazz c where c.course.id=?")
+                .setInteger(0, courseId)
+                .list();
+    }
+
+
 }

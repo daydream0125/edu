@@ -5,6 +5,7 @@ import com.edu.dao.ProblemDAO;
 import com.edu.model.Course;
 import com.edu.service.CourseService;
 import com.edu.service.ExerciseService;
+import com.edu.utils.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,15 @@ public class IndexController {
 
     @RequestMapping("/courses")
     @ResponseBody
-    public List getCourses() {
-        return courseService.getAllCourse();
+    public List getCourses(Page page) {
+        return courseService.getCourseByPage(page);
     }
+
+    @RequestMapping("/courses/count")
+    @ResponseBody
+    public Long getCoursesCount() {
+        return courseService.getCoursesCount();
+    }
+
+
 }

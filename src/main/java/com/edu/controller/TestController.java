@@ -31,9 +31,11 @@ public class TestController {
     @RequestMapping("/videoTest")
    public void uploadVideo(@RequestParam("video")MultipartFile multipartFile) throws IOException {
        String name = multipartFile.getOriginalFilename();
-       String path = "/Users/hanhao0125/Documents/edu-video/" + name + "1";
+       String path = "/Users/dev/Pictures/" + name;
        File file = new File(path);
        multipartFile.transferTo(file);
+       multipartFile.getInputStream().close();
+
    }
 
    @RequestMapping("/playVideo")
@@ -68,7 +70,7 @@ public class TestController {
    }
 
 
-   @SystemControllerLog("测试")
+//   @SystemControllerLog("测试")
    @RequestMapping("/testLog/{id}")
    public void testLog(@PathVariable("id") int id) {
         testService.test(id);

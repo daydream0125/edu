@@ -119,7 +119,7 @@
     var vm = new Vue({
         el: '#container',
         data: {
-            teacherId:${sessionScope.account.userId},
+            teacherId:<sec:authentication property="principal.username" />,
             problemId: 0,
             courses: [],
             chapters: [],

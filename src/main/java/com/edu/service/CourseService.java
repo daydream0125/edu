@@ -2,10 +2,8 @@ package com.edu.service;
 
 import com.edu.annotation.SystemServiceLog;
 import com.edu.dao.*;
-import com.edu.model.ChapterContent;
-import com.edu.model.Clazz;
-import com.edu.model.Course;
-import com.edu.model.CourseChapter;
+import com.edu.model.*;
+import com.edu.utils.Page;
 import com.edu.utils.UploadFile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,20 +32,29 @@ public class CourseService {
     private CourseChapterDAO courseChapterDAO;
     @Resource
     private ClassmateDAO classmateDAO;
+    @Resource
+    private SubmitExerciseDAO submitExerciseDAO;
 
 
+    @SystemServiceLog("增设课程")
     //为待存取的course设置外键开课老师以及开课老师所在的学校
     public void saveCourse(Course course, String teacherId) {
         course.setTeacher(accountDAO.findByUserId(teacherId));
         courseDAO.save(course);
     }
 
+    @SystemServiceLog("获取教师开设的课程")
     public List getCoursesByTeacherId(String teacherId) {
         return courseDAO.findCoursesByTeacherId(teacherId);
     }
 
     public List getAllCourse() {
         return courseDAO.getAllCourse();
+    }
+
+    @SystemServiceLog("分页获取课程")
+    public List getCourseByPage(Page page) {
+        return courseDAO.getCourseByPage(page);
     }
     @SystemServiceLog("新增班级")
     //为 class 设置外键 teacher 和课程 course
@@ -58,31 +65,28 @@ public class CourseService {
     }
 
 
+    @SystemServiceLog("获取学生数量")
     public long getStudentsdNumByCourseId(int courseId) {
         return classmateDAO.getStudentsNumByCourseId(courseId);
     }
+
+    @SystemServiceLog("获取课程，依据 id")
     public Course getCourseByCourseId(int Id) {
         return courseDAO.getCourseById(Id);
     }
-
+    @SystemServiceLog("依据课程下的班级")
     public List getClazzByCourseId(int courseId) {
         return clazzDAO.getClazzByCourseId(courseId);
     }
 
-    public void updateIsPublicRegister(int classId,Boolean isPublicRegister) {
-        clazzDAO.updateIsPublicRegister(classId,isPublicRegister);
-    }
-
-    public void updateCourse(Course course) {
-        courseDAO.updateCourse(course);
-    }
 
 
-
+    @SystemServiceLog("获取课程章节信息")
     public List getCourseChapterByCourseId(int courseId) {
         return courseChapterDAO.getAllChapterByCourseId(courseId);
     }
 
+    @SystemServiceLog("增设课程章节信息")
     //保存课程章节信息，其中courseChapter为章的信息，sectionList为章下面节信息的封装
     public boolean saveCourseChapter(CourseChapter courseChapter,int courseId,String sections[]) {
         try {
@@ -115,6 +119,7 @@ public class CourseService {
     }
 
 
+    @SystemServiceLog("获取课程章节信息，依据 id")
     public CourseChapter getCourseChapterById(int id) {
         return courseChapterDAO.getChapterById(id);
     }
@@ -122,13 +127,12 @@ public class CourseService {
         chapterContentDAO.save(chapterContent);
     }
 
-    public void updateCourseChapter(CourseChapter courseChapter) {
-        courseChapterDAO.update(courseChapter);
-    }
 
+    @SystemServiceLog("获取课程内容")
     public ChapterContent getChapterContentByChapterId(int chapterId) {
         return chapterContentDAO.getChapterContentByChapterId(chapterId);
     }
+
 
     public ChapterContent getChapterContentById(int id) {
         return chapterContentDAO.getChapterContentById(id);
@@ -143,6 +147,8 @@ public class CourseService {
         return courseChapterDAO.getSectionsByChapterId(chapterId);
     }
 
+
+    @SystemServiceLog("上传课程视屏")
     public String uploadChapterVideo(MultipartFile multipartFile,int contentId) {
 
         //相对路径,数据库存储该字段
@@ -154,7 +160,7 @@ public class CourseService {
 
         ChapterContent chapterContent = this.getChapterContentById(contentId);
         //文件已存在,先删除,后保存
-        if (chapterContent.getVideoPath() != null) {
+        if (!chapterContent.getVideoPath().equals("none")) {
             File deleteFile = new File(UploadFile.BASE_URL + chapterContent.getVideoPath());
             deleteFile.delete();
         }
@@ -169,6 +175,7 @@ public class CourseService {
         return relativePath;
     }
 
+    @SystemServiceLog("更新课程内容")
     public boolean updateChapterContent(int sectionId,String content) {
         try {
             ChapterContent chapterContent = chapterContentDAO.getChapterContentById(sectionId);
@@ -180,6 +187,8 @@ public class CourseService {
         }
         return true;
     }
+
+
 
     public int getCourseIdByChapterId(int chapterId) {
         return courseChapterDAO.getCourseIdByChapterId(chapterId);
@@ -193,5 +202,18 @@ public class CourseService {
 
     public List getSharpCourse(int courseId) {
         return courseDAO.getSharpCourse(courseId);
+    }
+
+    public Long getCoursesCount() {
+        return courseDAO.getCoursesCount();
+    }
+
+
+    public void finishCourse(int courseId) {
+        classmateDAO.countScore(courseId);
+    }
+
+    public List getSharpCourseByTeacherId(String teacherId) {
+        return courseDAO.getSharpCourseByTeacherId(teacherId);
     }
 }

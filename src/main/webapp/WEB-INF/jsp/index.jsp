@@ -1,6 +1,8 @@
 <%@ page pageEncoding="UTF-8" language="java" %>
 <html>
 <head>
+    <meta charset="utf-8">
+    <title>精准教育</title>
     <%@include file="static.jsp" %>
     <style>
         body {
@@ -81,6 +83,10 @@
         </Card>
         </div>
     </div>
+    <div style="margin-left: 200px;margin-top: 40px;margin-bottom: 100px">
+        <Page :total="count" @on-change="fetchData" show-total :page-size="pageSize" show-elevator>
+        </Page>
+    </div>
     </div>
 </div>
 
@@ -91,6 +97,9 @@
         data: {
             courses: [],
             topCourses: [],
+            pageSize:9,
+            pageNow:1,
+            count:0,
         },
         methods: {
             register: function () {
@@ -100,9 +109,23 @@
                 window.location.href = "course/" + courseId;
             },
             getCourses: function () {
-                $.get("courses", function (data) {
+                $.get("courses/count",function (data) {
+                    this.count = data;
+                    $.get("courses",
+                        {
+                            pageSize:this.pageSize,
+                            pageNow:this.pageNow,
+                            count:this.count
+                        }, function (data) {
+                            this.courses = data;
+                            this.topCourses = this.courses.slice(0, 4);
+                        }.bind(this))
+                }.bind(this));
+            },
+            fetchData:function (page) {
+                this.pageNow = page;
+                $.get("courses",{pageNow:page,pageSize:this.pageSize,count:this.count},function (data) {
                     this.courses = data;
-                    this.topCourses = this.courses.slice(0, 4);
                 }.bind(this))
             }
         },

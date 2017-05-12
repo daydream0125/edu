@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.edu.annotation.SystemControllerLog;
 import com.edu.dao.AccountDAO;
 import com.edu.model.Account;
+import com.edu.service.AccountMsgService;
 import com.edu.utils.HttpUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,16 +36,8 @@ public class SimpleLoginSuccessHandler implements AuthenticationSuccessHandler, 
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
-    private AccountDAO accountDAO;
-
-    public AccountDAO getAccountDAO() {
-        return accountDAO;
-    }
-
     @Resource
-    public void setAccountDAO(AccountDAO accountDAO) {
-        this.accountDAO = accountDAO;
-    }
+    private AccountMsgService accountMsgService;
 
 
 
@@ -74,13 +67,12 @@ public class SimpleLoginSuccessHandler implements AuthenticationSuccessHandler, 
         User user= (User) authentication.getPrincipal();
         try {
             //从spring security中获得用户id，然后从数据库中取出该account，更新相关信息，放入session中
-            account = accountDAO.findByUserId(user.getUsername());
+            account = accountMsgService.getAccountById(user.getUsername());
             String ip = HttpUtils.getRealIP(request);
             //将该次登录时间和登录ip写入数据库
             account.setLastLoginTime(new Date());
             account.setLoginIp(ip);
-            accountDAO.save(account);
-            request.getSession().setAttribute("account",account);
+            accountMsgService.updateAccount(account);
         } catch (DataAccessException e) {
             if (logger.isWarnEnabled()) {
                 logger.info("无法更新用户登录信息至数据库");

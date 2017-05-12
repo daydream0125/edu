@@ -87,4 +87,11 @@ public class ExerciseDAO  {
 				.setInteger(0,exerciseId)
 				.list();
 	}
+
+	public boolean existFinalExercise(int classId) {
+		return (Long) getSession()
+				.createQuery("select count(*) from Exercise  e where e.clazz.classId=? and e.isFinal = true")
+				.setInteger(0,classId)
+				.uniqueResult() != 0;
+	}
 }

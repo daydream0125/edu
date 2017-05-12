@@ -89,10 +89,11 @@
                 <th>创建时间</th>
                 <th>状态</th>
                 <th>注册</th>
+                <th>结课</th>
             </tr>
             </thead>
             <tbody>
-            <tr v-for="clazz in clazzes">
+            <tr v-for="(clazz,index) in clazzes">
                 <td>{{clazz.className}}</td>
                 <td>{{clazz.createTime}}</td>
                 <td v-if="clazz.isFinish">
@@ -106,9 +107,15 @@
                         <Tag type="border" color="green">已开放</Tag>
                     </td>
                     <td v-else>
-                        <i-button type="primary" @click="openRegister(clazz.classId)">点击开放</i-button>
+                        <i-button type="primary" @click="openRegister(index)">点击开放</i-button>
                     </td>
                 </sec:authorize>
+                <td v-if="clazz.isFinish">
+                    <Tag type="border" color="green">已结课</Tag>
+                </td>
+                <td v-else>
+                    <i-button type="success" size="large" @click="finish(index)">结课并计算总成绩</i-button>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -214,7 +221,7 @@
         el: '#container',
         data: {
             courseId:${courseId},
-            teacherId:${sessionScope.account.userId},
+            teacherId:<sec:authentication property="principal.username" />,
             course: {},
             clazzes: [],
             studentNum: 0,
@@ -235,6 +242,30 @@
             showErrorList: false
         },
         methods: {
+            finishClass: function (index) {
+                $.get("teacher/finishClass/" + this.clazzes[index].classId, function (data) {
+                    if (data === false) {
+                        alert("结课失败，请重试或联系管理员")
+                    } else {
+                        alert("结课成功");
+                    }
+                }.bind(this))
+            },
+            finish: function (index) {
+                $.get("teacher/existsUnMarkExercise/" + this.clazzes[index].classId, function (data) {
+                    if (data === true) {
+                        alert("当前课程存在未批改作业，请先将作业批改完成后尝试。")
+                    } else {
+                        $.get("teacher/existFinalExercise/" + this.clazzes[index].classId, function (data) {
+                            if (data === true) {
+                                this.finishClass(index);
+                            } else {
+                                alert("当前课程中不存在最后考试，无法结课");
+                            }
+                        }.bind(this));
+                    }
+                }.bind(this));
+            },
             getCourseInfo: function (courseId) {
                 $.get("course/info/" + courseId, function (data) {
                     this.course = data;
@@ -254,8 +285,8 @@
                 //跳转至课程章节信息
                 window.location.href = "course/" + this.courseId + "/courseChapterInfo";
             },
-            openRegister: function (classId) {
-                $.get("teacher/openRegister", {classId: classId}, function (data) {
+            openRegister: function (index) {
+                $.get("teacher/openRegister", {classId: this.clazzes[index].classId}, function (data) {
                     if (data === true) {
                         alert('开放注册成功!');
                     }
@@ -357,9 +388,9 @@
         }
     });
     new Vue({
-        el:'#teacher-course',
-        data:{
-            isActive:true
+        el: '#teacher-course',
+        data: {
+            isActive: true
         }
     })
 </script>

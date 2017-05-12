@@ -5,11 +5,15 @@ import com.edu.annotation.*;
 import com.edu.dao.LogDAO;
 import com.edu.model.Account;
 import com.edu.model.Log;
+import com.edu.service.LogService;
 import com.edu.utils.HttpUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -28,7 +32,7 @@ import java.util.Date;
 public class SystemLogAspect {
     //注入Service用于把日志保存数据库
     @Resource
-    private LogDAO logService;
+    private LogService logService;
     //本地异常日志记录对象
     private static final Logger logger = LoggerFactory.getLogger(SystemLogAspect.class);
 
@@ -51,11 +55,11 @@ public class SystemLogAspect {
      */
     private String getParams(JoinPoint joinPoint) {
         StringBuilder params = new StringBuilder();
-        if (joinPoint.getArgs() != null && joinPoint.getArgs().length > 0) {
-            for (int i = 0; i < joinPoint.getArgs().length; i++) {
-                params.append(JSON.toJSONString(joinPoint.getArgs()[i])).append(";");
-            }
-        }
+//        if (joinPoint.getArgs() != null && joinPoint.getArgs().length > 0) {
+//            for (int i = 0; i < joinPoint.getArgs().length; i++) {
+//                params.append(JSON.toJSONString(joinPoint.getArgs()[i])).append(";");
+//            }
+//        }
         return params.toString();
     }
 
@@ -69,13 +73,14 @@ public class SystemLogAspect {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         HttpSession session = request.getSession();
         //读取session中的用户
-        Account account = (Account) session.getAttribute("account");
+        Object o = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+        System.out.println(o);
         //请求的IP
-        String userName = "未登陆";
         String userId = "未登陆";
-        if (account != null) {
-            userName = account.getName();
-            userId = account.getUserId();
+        if (!o.equals("anonymousUser")) {
+            userId = ((UserDetails) o).getUsername();
         }
         String ip = HttpUtils.getRealIP(request);
         try {
@@ -84,7 +89,7 @@ public class SystemLogAspect {
             System.out.println("=====前置通知开始=====");
             System.out.println("请求方法:" + (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()"));
             System.out.println("方法描述:" + getControllerMethodDescription(joinPoint));
-            System.out.println("请求人:" + userName);
+            System.out.println("请求人:" + userId);
             System.out.println("请求IP:" + ip);
             System.out.println("请求时间:" + new Date());
             //*========数据库日志=========*//
@@ -99,8 +104,7 @@ public class SystemLogAspect {
             log.setOperation(getControllerMethodDescription(joinPoint));
 
             //保存数据库
-            logService.save(log);
-            logService.save(log);
+            logService.saveLog(log);
             System.out.println("=====前置通知结束=====");
 
         } catch (Exception e) {
@@ -119,15 +123,12 @@ public class SystemLogAspect {
     @AfterThrowing(pointcut = "serviceAspect()", throwing = "e")
     public void doAfterThrowing(JoinPoint joinPoint, Throwable e) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        HttpSession session = request.getSession();
-        //读取session中的用户
-        Account account = (Account) session.getAttribute("account");
-
-        String userName = "未登陆";
+        Object o = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
         String userId = "未登陆";
-        if (account != null) {
-            userName = account.getName();
-            userId = account.getUserId();
+        if (!o.equals("anonymousUser")) {
+            userId = ((UserDetails) o).getUsername();
         }
         //获取请求ip
         String ip = request.getRemoteAddr();
@@ -135,27 +136,26 @@ public class SystemLogAspect {
         String params = getParams(joinPoint);
         try {
               /*========控制台输出=========*/
-            System.out.println("=====--------=====");
-            System.out.println("=====异常通知开始123=====");
+            System.out.println("=====异常通知开始=====");
             System.out.println("异常代码:" + e.getClass().getName());
             System.out.println("异常信息:" + e.getMessage());
             System.out.println("异常方法:" + (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()"));
             System.out.println("方法描述:" + getServiceMethodDescription(joinPoint));
-            System.out.println("请求人:" + userName);
+            System.out.println("请求人:" + userId);
             System.out.println("请求IP:" + ip);
-            System.out.println("请求参数:" + params);
+//            System.out.println("请求参数:" + params);
                /*==========数据库日志=========*/
             Log log = new Log();
             log.setUserId(userId);
             log.setIp(ip);
+            log.setType((byte) 1);
             log.setOperTime(new Date());
-            log.setOperTime(new Date());
-            log.setParams(getParams(joinPoint));
+            log.setParams("");
             log.setMethod(joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()");
             log.setExceptionCode(e.getClass().getName());
-            log.setOperation(getControllerMethodDescription(joinPoint));
+            log.setOperation(getServiceMethodDescription(joinPoint));
             //保存数据库
-            logService.save(log);
+            logService.saveLog(log);
             System.out.println("=====异常通知结束=====");
         } catch (Exception ex) {
             //记录本地异常日志

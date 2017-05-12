@@ -49,7 +49,7 @@
     new Vue({
         el: "#container",
         data: {
-            userId:${sessionScope.account.userId},
+            userId:<sec:authentication property="principal.username" />,
             user: {},
         },
         methods: {

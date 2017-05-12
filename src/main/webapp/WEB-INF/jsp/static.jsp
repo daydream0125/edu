@@ -9,7 +9,7 @@
 <meta charset="utf-8">
 <link href="http://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="http://unpkg.com/iview/dist/styles/iview.css">
-<link rel="shortcut icon" href="http://bootstrap.evget.com/assets/ico/favicon.ico">
+<%--<link rel="shortcut icon" href="http://bootstrap.evget.com/assets/ico/favicon.ico">--%>
 <style>
     body{
         margin-top: 70px;

@@ -44,7 +44,7 @@
                     <a href="${pageContext.request.contextPath}/notice">通知公告</a>
                 </li>
                 <sec:authorize access="hasRole('ROLE_ADMIN')">
-                    <li id="notice" :class="{active:isActive}">
+                    <li id="admin" :class="{active:isActive}">
                         <a href="${pageContext.request.contextPath}/admin">管理员</a>
                     </li>
                 </sec:authorize>
@@ -52,7 +52,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <sec:authorize access="hasRole('ROLE_USER')">
                     <li><a href="${pageContext.request.contextPath}/userInfo"
-                           class="btn btn-link">${sessionScope.account.name}</a></li>
+                           class="btn btn-link"><sec:authentication property="principal.username" /></a></li>
                     <li><a href="${pageContext.request.contextPath}/spring_logout">注销</a></li>
                 </sec:authorize>
                 <sec:authorize access="not hasRole('ROLE_USER')">

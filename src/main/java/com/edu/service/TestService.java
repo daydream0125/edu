@@ -16,8 +16,9 @@ public class TestService {
     @Resource
     private CourseDAO courseDAO;
 
-    @SystemServiceLog("fuck")
+    @SystemServiceLog("errorTest")
     public void test(int id) {
         System.out.println("this is service test" + id);
+        throw new IllegalArgumentException();
     }
 }

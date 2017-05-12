@@ -1,5 +1,6 @@
 package com.edu.service;
 
+import com.edu.annotation.SystemServiceLog;
 import com.edu.dao.AccountDAO;
 import com.edu.dao.RoleDAO;
 import com.edu.dao.UserInfoDAO;
@@ -76,6 +77,7 @@ public class AccountMsgService {
      1、同时向数据库account、userInfo写入账号信息
      2、对该用户赋予ROLE_USER角色，即凡注册用户均有ROLE_USER权限。
      */
+    @SystemServiceLog("用户注册")
     public void saveAccount(String userId, String password) {
         Account account = new Account(userId, md5PasswordEncoder.encode(password));
         account.setCreateTime(new Date());
@@ -90,16 +92,19 @@ public class AccountMsgService {
         return accountDAO.findByUserId(userId);
     }
 
+    @SystemServiceLog("更新账户")
     public void updateAccount(Account account) {
         accountDAO.update(account);
     }
 
+    @SystemServiceLog("添加学生角色")
     public void setRoleStudent(Account account) {
         Role role = roleDAO.findByRoleName("ROLE_STUDENT");
         account.getRoles().add(role);
         accountDAO.update(account);
     }
 
+    @SystemServiceLog("更新用户信息")
     public boolean updateUserInfo(UserInfo userInfo,String cardNumber) {
         Account account = accountDAO.findByUserId(userInfo.getUserId());
         UserInfo info = userInfoDAO.findByUserId(userInfo.getUserId());
@@ -125,4 +130,5 @@ public class AccountMsgService {
         }
         return true;
     }
+
 }

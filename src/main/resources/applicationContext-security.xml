@@ -27,30 +27,24 @@
             </bean>
         </property>
     </bean>
-
-    <!--<s:global-method-security pre-post-annotations="enabled"/>-->
     <s:global-method-security secured-annotations="enabled"/>
-    <s:http use-expressions="true">
+    <s:http use-expressions="true" auto-config="true" access-denied-page="/access_denied">
         <!--对根路径下的资源不设置拦截（公共资源），只有对需要拦截的资源进行相应的拦截-->
-        <s:intercept-url pattern="/no-public/*" access="hasRole('ROLE_USER')"/>
         <s:intercept-url pattern="/userInfo" access="hasRole('ROLE_USER')"/>
         <s:intercept-url pattern="/teacher/**" access="hasRole('ROLE_TEACHER')"/>
         <s:intercept-url pattern="/student/**" access="hasRole('ROLE_STUDENT')" />
         <s:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
 
         <!-- 会话管理 -->
-        <!--限制登录用户只能存在一个-->
-        <s:session-management invalid-session-url="/sign">
+        <!--限制登录用户只能存在一个,若超过1个，则将之前的 session 删除，替换为新用户，并对原先设备提示已在其他设备登录-->
+        <!--注意这里坑很多-->
+        <!--若设置error-if-maximum-exceeded为 true，则直接会跳转 form-login 的 authentication-failure-url,
+        并不会跳转session-authentication-error-url。expired-url仅在error-if-maximum-exceeded=false 时有效-->
+        <s:session-management>
             <!-- 并行控制 -->
-            <s:concurrency-control max-sessions="1" error-if-maximum-exceeded="true"/>
+            <s:concurrency-control max-sessions="1" error-if-maximum-exceeded="false" expired-url="/sign?isLogin=true"/>
         </s:session-management>
 
-        <!-- loging-processing-url=" /spring_security_check" 仅仅是个名字，但是要和显示层action保持一致，是security进行认证的记号而已 -->
-        <!-- login-page 自定义的登录处理action,该action不进行任何的认证处理，spring security会在该action前执行-->
-        <!-- default-target-url登录成功后的页面 -->
-        <!-- login-processing-ur不用改动，但是jsp页面的action必须与此相同 -->
-        <!-- authentication-failure-urljsp页面输入框名字必须与此相同 -->
-        <!-- jsp页面输入框名字必须与此相同 -->
         <s:form-login login-page="/sign"
                       default-target-url="/index"
                       login-processing-url="/j_security_check"
@@ -59,7 +53,7 @@
                       password-parameter="password"
                       username-parameter="username"/>
 
-        <s:logout invalidate-session="true"
+        <s:logout invalidate-session="true" delete-cookies="JSESSIONID"
                   logout-success-url="/logout" logout-url="/spring_logout"/>
     </s:http>
     <!--用于处理登录成功后相关信息的写入-->

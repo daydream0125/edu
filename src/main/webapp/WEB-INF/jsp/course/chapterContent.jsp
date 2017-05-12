@@ -30,7 +30,7 @@
         <i-button type="primary" size="large" @click="upload">上传视屏</i-button>
     </sec:authorize>
     <sec:authorize access="hasAnyRole('ROLE_TEACHER','ROLE_STUDENT')">
-        <i-button type="primary" size="large" @click="showVideo = true" v-if="content.videoPath !== null">观看视屏</i-button>
+        <i-button type="primary" size="large" @click="showVideo = true" v-if="content.videoPath !== 'none'">观看视屏</i-button>
         <i-button type="primary" size="large" @click="goToChapters">返回章节信息</i-button>
     </sec:authorize>
     </div>

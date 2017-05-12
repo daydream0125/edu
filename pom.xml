@@ -297,10 +297,11 @@
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>9.2.11.v20150529</version>
                 <configuration>
+                    <jvmArgs>-Xmx2024m -Xms2024m</jvmArgs>
                     <webApp>
                         <contextPath>/edu</contextPath>
                         <baseResource implementation="org.eclipse.jetty.util.resource.ResourceCollection">
-                            <resourcesAsCSV>src/main/webapp,/Users/dev/edu-resources/</resourcesAsCSV>
+                            <resourcesAsCSV>src/main/webapp,/Users/dev/Documents/edu-resources/</resourcesAsCSV>
                         </baseResource>
                     </webApp>
                 </configuration>

@@ -80,7 +80,7 @@
     new Vue({
         el: '#app',
         data: {
-            teacherId:${sessionScope.account.userId},
+            teacherId:<sec:authentication property="principal.username" />,
             exerciseId:${exerciseId},
             exercise: {},
             problemCount: 0,

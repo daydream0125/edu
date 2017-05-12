@@ -5,7 +5,7 @@
     <title>管理员</title>
     <style>
         table {
-            font-size: 15px;
+            font-size: 18px;
         }
     </style>
 </head>
@@ -27,7 +27,6 @@
             <th>操作</th>
             <th>ip</th>
             <th>方法</th>
-            <th>参数</th>
         </tr>
         </thead>
         <tbody>
@@ -37,7 +36,6 @@
                 <td>{{l.operation}}</td>
                 <td>{{l.ip}}</td>
                 <td>{{l.method}}</td>
-                <td>{{l.params}}</td>
             </tr>
         </tbody>
     </table>
@@ -51,7 +49,7 @@
     new Vue({
         el: '#container',
         data: {
-            userId:${sessionScope.account.userId},
+            userId:<sec:authentication property="principal.username" />,
             logs: [],
             logsCount: 0,
             pageNow: 1,
@@ -74,6 +72,12 @@
         },
         mounted: function () {
             this.getLog();
+        }
+    });
+    new Vue({
+       el:'#admin',
+        data:{
+           isActive:true
         }
     })
 </script>

@@ -172,7 +172,7 @@
         el: '#app',
         data: {
             //考虑到一个学生参加的课程不会很多，故一次全部取出，存在前端，需要时按需取之即可。
-            userId:${sessionScope.account.userId},
+            userId:<sec:authentication property="principal.username" />,
             clazzes: [],//该学生报名的班级(实际上获取的是 classmate 对象，Hibernate 自动将关联对象 class 对象取出，整个页面的数据基本都来自这个数组)
             classmate: {},
             clazzLen: 0,

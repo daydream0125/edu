@@ -67,4 +67,9 @@ public class DB extends AbstractJUnit4SpringContextTests {
             clazzService.saveClassMate(classmate);
         }
     }
+
+    @Test
+    public void testFinishCourse() {
+        courseService.finishCourse(5);
+    }
 }

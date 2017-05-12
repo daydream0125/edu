@@ -22,16 +22,15 @@
     <aop:aspectj-autoproxy/>
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="defaultEncoding" value="utf-8" />
-        <property name="maxInMemorySize" value="540000" />
+        <property name="maxInMemorySize" value="2048000000" />
+        <property name="maxUploadSize" value="2048000000" />
+        <property name="maxUploadSizePerFile" value="2048000000" />
+        <property name="uploadTempDir" value="static" />
     </bean>
     <!-- 定义视图解析器 -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix">
-            <value>/WEB-INF/jsp/</value>
-        </property>
-        <property name="suffix">
-            <value>.jsp</value>
-        </property>
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
     </bean>
     <bean id="handlerInterceptor1"
           class="com.edu.utils.HandlerInterceptor1"/>

@@ -20,7 +20,7 @@
     <h1 style="text-align: center">{{answers[0].exercise.exerciseName}}</h1>
     <br>
     <i-col offset="14">
-        <h4>答题人：${sessionScope.account.name}</h4>
+        <h4>答题人：<sec:authentication property="principal.username" /></h4>
     </i-col>
     <p>本次练习共<Tag type="border" color="blue">{{answersLen}}</Tag>道题
     </p>
@@ -74,7 +74,7 @@
     new Vue({
         el: '#container',
         data: {
-            userId:${sessionScope.account.userId},
+            userId:<sec:authentication property="principal.username" />,
             exerciseId:${exerciseId},
             answers: [],
             answersLen: 0,
