@@ -30,7 +30,6 @@ public class ScoreController {
     @Secured({"ROLE_TEACHER", "ROLE_ADMIN"})
     @SystemControllerLog("查看学生成绩")
     @RequestMapping("/classmateScore")
-
     public String classmateScore() {
         return "teacher/score/classmateScore";
     }

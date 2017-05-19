@@ -137,6 +137,9 @@ public class ExerciseService {
     //submitAnswers属于同一exercise
     public boolean batchSaveAnswers(Answer answer, String ip) {
         try {
+            if (submitExerciseDAO.checkIsSubmit(answer.getUserId(),answer.getExerciseId())) {
+                return false;
+            }
             Exercise exercise = exerciseDAO.getById(answer.getExerciseId());
             Classmate classmate = classmateDAO.getClassmateByExerciseAndUser(answer.getExerciseId(), answer.getUserId());
             //创建 submitAnswer

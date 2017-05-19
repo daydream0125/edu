@@ -63,9 +63,16 @@ public class ExerciseDAO  {
 		query.setBoolean(0,true);
 		query.setString(1,userId);
 		return query.list();
+
 	}
+
+	/**
+	 * 获取题目信息，包括ID，title，type，description，problemPicPath
+	 * @param exerciseId
+	 * @return
+	 */
 	public List getProlems(int exerciseId) {
-		String hql = "select p from Exercise e,Problem p where e.exerciseId=? and p in elements(e.problems)";
+		String hql = "select p.id,p.title,p.type,p.description,p.problemPicPath from Exercise e,Problem p where e.exerciseId=? and p in elements(e.problems)";
 		Query query = getSession().createQuery(hql);
 		query.setInteger(0,exerciseId);
 		return query.list();

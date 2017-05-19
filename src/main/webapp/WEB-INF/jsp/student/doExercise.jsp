@@ -26,25 +26,29 @@
     <br>
     <br>
     <hr>
-    <p>{{globalIndex+1}}.{{currentProblem.title}}</p>
+    <div v-if="currentProblem[4] !== 'none'">
+        <img src="currentProblem[4]" alt="problem">
+    </div>
+    <p>{{globalIndex+1}}.{{currentProblem[1]}}</p>
     <br>
-    <div v-if="currentProblem.type === 1">
+
+    <div v-if="currentProblem[2] === 1">
         <!-- 选择题 -->
         <Radio-group v-model="answer" vertical>
-            <div v-for="(choose,index) in currentProblem.description.split('\n')">
+            <div v-for="(choose,index) in currentProblem[3].split('\n')">
                 <Radio :label="index | formatChoose" style="font-size: large;">
                     <span>{{index | formatChoose}} {{choose}}</span>
                 </Radio>
             </div>
         </Radio-group>
     </div>
-    <div v-else-if="currentProblem.type === 2">
+    <div v-else-if="currentProblem[2] === 2">
         <!-- 填空 -->
         <i-input v-model="answer" type="textarea" :rows="4" placeholder="参考答案" size="large"
         ></i-input>
 
     </div>
-    <div v-else-if="currentProblem.type === 3">
+    <div v-else-if="currentProblem[2] === 3">
         <!-- 判断 -->
         <Radio-group v-model="answer">
             <Radio label="对">
@@ -53,7 +57,7 @@
             </Radio>
         </Radio-group>
     </div>
-    <div v-else-if="currentProblem.type === 4">
+    <div v-else-if="currentProblem[2] === 4">
         <!--  简答 -->
         <Tooltip placement="bottom">
             <Upload action="student/upload/answerPic" :on-success="handleAnswerPic" name="pic">
@@ -133,7 +137,7 @@
                             answer: '',
                             answerPic:''
                         });
-                        this.problemsId.push(this.currentProblem.problemId);
+                        this.problemsId.push(this.currentProblem[0]);
 
                     }.bind(this),
                     error: function (err) {
@@ -164,7 +168,7 @@
                 this.answerPic = '';
                 this.globalIndex++;
                 this.currentProblem = this.problems[this.globalIndex];
-                this.problemsId.push(this.currentProblem.problemId);
+                this.problemsId.push(this.currentProblem[0]);
             },
             submit: function () {
                 //进度条

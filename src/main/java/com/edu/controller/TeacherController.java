@@ -66,7 +66,6 @@ public class TeacherController {
     @ResponseBody
     public String uploadContentVideo(@RequestParam("video") MultipartFile multipartFile,
                                      @RequestParam("contentId") int contentId) throws IOException {
-
         return courseService.uploadChapterVideo(multipartFile, contentId);
     }
 
